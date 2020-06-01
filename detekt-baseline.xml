@@ -310,6 +310,7 @@
     <ID>ForbiddenComment:CordappProviderImplTests.kt$CordappProviderImplTests.Companion$// TODO: Cordapp name should differ from the JAR name</ID>
     <ID>ForbiddenComment:CoreFlowHandlers.kt$NotaryChangeHandler$// TODO: Right now all nodes will automatically approve the notary change. We need to figure out if stricter controls are necessary.</ID>
     <ID>ForbiddenComment:CrossCashTest.kt$CrossCashState$// TODO: Alternative: We may possibly reduce the complexity of the search even further using some form of</ID>
+    <ID>ForbiddenComment:Crypto.kt$Crypto$// TODO: Check if non-ECC keys satisfy params (i.e. approved/valid RSA modulus size).</ID>
     <ID>ForbiddenComment:Crypto.kt$Crypto$// TODO: We currently use SHA256(seed) when retrying, but BIP32 just skips a counter (i) that results to an invalid key.</ID>
     <ID>ForbiddenComment:Crypto.kt$Crypto$// TODO: change the val name to a more descriptive one as it's now confusing and looks like a Key type.</ID>
     <ID>ForbiddenComment:Crypto.kt$Crypto$// TODO: change val name to SPHINCS256_SHA512. This will break backwards compatibility.</ID>
@@ -434,6 +435,7 @@
     <ID>ForbiddenComment:RatesFixFlow.kt$RatesFixFlow.FixQueryFlow$// TODO: add deadline to receive</ID>
     <ID>ForbiddenComment:ResolveTransactionsFlow.kt$ResolveTransactionsFlow$// TODO: This could be done in parallel with other fetches for extra speed.</ID>
     <ID>ForbiddenComment:ResolveTransactionsFlowTest.kt$ResolveTransactionsFlowTest$// TODO: this operation should not require an explicit transaction</ID>
+    <ID>ForbiddenComment:RestrictedEntityManager.kt$RestrictedEntityManager$// TODO: Figure out which other methods on EntityManager need to be blocked?</ID>
     <ID>ForbiddenComment:ScheduledActivityObserver.kt$ScheduledActivityObserver.Companion$// TODO: Beware we are calling dynamically loaded contract code inside here.</ID>
     <ID>ForbiddenComment:ScheduledFlowIntegrationTests.kt$ScheduledFlowIntegrationTests$// TODO: the queries below are not atomic so we need to allow enough time for the scheduler to finish. Would be better to query scheduler.</ID>
     <ID>ForbiddenComment:SendTransactionFlow.kt$DataVendingFlow$// Security TODO: Check for abnormally large or malformed data requests</ID>
@@ -688,7 +690,6 @@
     <ID>LongParameterList:OnLedgerAsset.kt$OnLedgerAsset.Companion$(tx: TransactionBuilder, amountIssued: Amount&lt;Issued&lt;T&gt;&gt;, assetStates: List&lt;StateAndRef&lt;S&gt;&gt;, payChangeTo: AbstractParty, deriveState: (TransactionState&lt;S&gt;, Amount&lt;Issued&lt;T&gt;&gt;, AbstractParty) -&gt; TransactionState&lt;S&gt;, generateMoveCommand: () -&gt; CommandData, generateExitCommand: (Amount&lt;Issued&lt;T&gt;&gt;) -&gt; CommandData)</ID>
     <ID>LongParameterList:OnLedgerAsset.kt$OnLedgerAsset.Companion$(tx: TransactionBuilder, payments: List&lt;PartyAndAmount&lt;T&gt;&gt;, acceptableStates: List&lt;StateAndRef&lt;S&gt;&gt;, payChangeTo: AbstractParty, deriveState: (TransactionState&lt;S&gt;, Amount&lt;Issued&lt;T&gt;&gt;, AbstractParty) -&gt; TransactionState&lt;S&gt;, generateMoveCommand: () -&gt; CommandData)</ID>
     <ID>LongParameterList:ParametersUtilities.kt$( notaries: List&lt;NotaryInfo&gt; = emptyList(), minimumPlatformVersion: Int = 1, modifiedTime: Instant = Instant.now(), maxMessageSize: Int = 10485760, // TODO: Make this configurable and consistence across driver, bootstrapper, demobench and NetworkMapServer maxTransactionSize: Int = maxMessageSize * 50, whitelistedContractImplementations: Map&lt;String, List&lt;AttachmentId&gt;&gt; = emptyMap(), epoch: Int = 1, eventHorizon: Duration = 30.days, packageOwnership: Map&lt;String, PublicKey&gt; = emptyMap() )</ID>
-    <ID>LongParameterList:PersistentIdentityService.kt$PersistentIdentityService$( trustRoot: X509Certificate, caCertificates: List&lt;X509Certificate&gt; = emptyList(), notaryIdentities: List&lt;Party&gt; = emptyList(), pkToIdCache: WritablePublicKeyToOwningIdentityCache, wellKnownPartyFromX500Name: (CordaX500Name) -&gt; Party?, getAllIdentities: () -&gt; Iterable&lt;PartyAndCertificate&gt; )</ID>
     <ID>LongParameterList:PersistentUniquenessProvider.kt$PersistentUniquenessProvider$( states: List&lt;StateRef&gt;, txId: SecureHash, callerIdentity: Party, requestSignature: NotarisationRequestSignature, timeWindow: TimeWindow?, references: List&lt;StateRef&gt; )</ID>
     <ID>LongParameterList:PhysicalLocationStructures.kt$WorldCoordinate$(screenWidth: Double, screenHeight: Double, topLatitude: Double, bottomLatitude: Double, leftLongitude: Double, rightLongitude: Double)</ID>
     <ID>LongParameterList:QueryCriteria.kt$QueryCriteria.FungibleAssetQueryCriteria$( participants: List&lt;AbstractParty&gt;? = this.participants, owner: List&lt;AbstractParty&gt;? = this.owner, quantity: ColumnPredicate&lt;Long&gt;? = this.quantity, issuer: List&lt;AbstractParty&gt;? = this.issuer, issuerRef: List&lt;OpaqueBytes&gt;? = this.issuerRef, status: Vault.StateStatus = this.status, contractStateTypes: Set&lt;Class&lt;out ContractState&gt;&gt;? = this.contractStateTypes )</ID>
@@ -1573,6 +1574,7 @@
     <ID>TooGenericExceptionCaught:NotaryUtils.kt$e: Exception</ID>
     <ID>TooGenericExceptionCaught:ObjectDiffer.kt$ObjectDiffer$throwable: Exception</ID>
     <ID>TooGenericExceptionCaught:P2PMessagingClient.kt$P2PMessagingClient$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:PersistentIdentityMigrationNewTableTest.kt$PersistentIdentityMigrationNewTableTest$e: Exception</ID>
     <ID>TooGenericExceptionCaught:PersistentUniquenessProvider.kt$PersistentUniquenessProvider$e: Exception</ID>
     <ID>TooGenericExceptionCaught:ProfileController.kt$ProfileController$e: Exception</ID>
     <ID>TooGenericExceptionCaught:PropertyValidationTest.kt$PropertyValidationTest$e: Exception</ID>
@@ -2008,6 +2010,8 @@
     <ID>WildcardImport:CordaModule.kt$import net.corda.core.identity.*</ID>
     <ID>WildcardImport:CordaModule.kt$import net.corda.core.transactions.*</ID>
     <ID>WildcardImport:CordaRPCOps.kt$import net.corda.core.node.services.vault.*</ID>
+    <ID>WildcardImport:CordaRPCOpsImplTest.kt$import net.corda.core.messaging.*</ID>
+    <ID>WildcardImport:CordaRPCOpsImplTest.kt$import org.assertj.core.api.Assertions.*</ID>
     <ID>WildcardImport:CordaServiceTest.kt$import kotlin.test.*</ID>
     <ID>WildcardImport:CordaViewModel.kt$import tornadofx.*</ID>
     <ID>WildcardImport:Cordapp.kt$import net.corda.core.cordapp.Cordapp.Info.*</ID>
@@ -2070,6 +2074,7 @@
     <ID>WildcardImport:EvolutionSerializerFactoryTests.kt$import kotlin.test.*</ID>
     <ID>WildcardImport:EvolutionSerializerFactoryTests.kt$import net.corda.serialization.internal.amqp.testutils.*</ID>
     <ID>WildcardImport:Explorer.kt$import tornadofx.*</ID>
+    <ID>WildcardImport:FiberDeserializationCheckingInterceptor.kt$import net.corda.node.services.statemachine.*</ID>
     <ID>WildcardImport:FinalityFlowMigration.kt$import net.corda.core.flows.*</ID>
     <ID>WildcardImport:FinalityFlowTests.kt$import net.corda.testing.core.*</ID>
     <ID>WildcardImport:FinalityFlowTests.kt$import net.corda.testing.node.internal.*</ID>
@@ -2094,6 +2099,8 @@
     <ID>WildcardImport:FlowRetryTest.kt$import net.corda.core.flows.*</ID>
     <ID>WildcardImport:FlowStackSnapshotTest.kt$import net.corda.core.flows.*</ID>
     <ID>WildcardImport:FlowStateMachine.kt$import net.corda.core.flows.*</ID>
+    <ID>WildcardImport:FlowStateMachineImpl.kt$import net.corda.core.flows.*</ID>
+    <ID>WildcardImport:FlowStateMachineImpl.kt$import net.corda.core.internal.*</ID>
     <ID>WildcardImport:FlowsDrainingModeContentionTest.kt$import net.corda.core.flows.*</ID>
     <ID>WildcardImport:FxTransactionBuildTutorialTest.kt$import net.corda.finance.*</ID>
     <ID>WildcardImport:GenericsTests.kt$import net.corda.serialization.internal.amqp.testutils.*</ID>
@@ -2411,6 +2418,8 @@
     <ID>WildcardImport:SignedTransaction.kt$import net.corda.core.contracts.*</ID>
     <ID>WildcardImport:SignedTransaction.kt$import net.corda.core.crypto.*</ID>
     <ID>WildcardImport:SimpleMQClient.kt$import org.apache.activemq.artemis.api.core.client.*</ID>
+    <ID>WildcardImport:SingleThreadedStateMachineManager.kt$import net.corda.core.internal.*</ID>
+    <ID>WildcardImport:SingleThreadedStateMachineManager.kt$import net.corda.node.services.statemachine.interceptors.*</ID>
     <ID>WildcardImport:SpringDriver.kt$import net.corda.testing.node.internal.*</ID>
     <ID>WildcardImport:StandaloneCordaRPClientTest.kt$import net.corda.core.messaging.*</ID>
     <ID>WildcardImport:StandaloneCordaRPClientTest.kt$import net.corda.core.node.services.vault.*</ID>
@@ -2491,6 +2500,7 @@
     <ID>WildcardImport:ValidatingNotaryServiceTests.kt$import net.corda.core.flows.*</ID>
     <ID>WildcardImport:ValidatingNotaryServiceTests.kt$import net.corda.testing.node.internal.*</ID>
     <ID>WildcardImport:VaultFiller.kt$import net.corda.core.contracts.*</ID>
+    <ID>WildcardImport:VaultFlowTest.kt$import net.corda.core.flows.*</ID>
     <ID>WildcardImport:VaultQueryExceptionsTests.kt$import net.corda.core.node.services.*</ID>
     <ID>WildcardImport:VaultQueryExceptionsTests.kt$import net.corda.core.node.services.vault.*</ID>
     <ID>WildcardImport:VaultQueryExceptionsTests.kt$import net.corda.core.node.services.vault.QueryCriteria.*</ID>
