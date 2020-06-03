@@ -61,6 +61,8 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import javax.annotation.concurrent.ThreadSafe
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -102,6 +104,10 @@ class SingleThreadedStateMachineManager(
         val startedFutures = HashMap<StateMachineRunId, OpenFuture<Unit>>()
         /** Flows scheduled to be retried if not finished within the specified timeout period. */
         val timedFlows = HashMap<StateMachineRunId, ScheduledTimeout>()
+
+        // first attempt; a naive solution in which we just keep futures in memory until client will acknowledge
+        // flows results/ exceptions held to be available to clients upon request, even after flows' lifetime.
+        val clientIdFutures = HashMap<UUID, OpenFuture<Any?>>()
     }
 
     private val mutex = ThreadBox(InnerState())
@@ -253,7 +259,8 @@ class SingleThreadedStateMachineManager(
             flowLogic: FlowLogic<A>,
             context: InvocationContext,
             ourIdentity: Party?,
-            deduplicationHandler: DeduplicationHandler?
+            deduplicationHandler: DeduplicationHandler?,
+            clientUUID: UUID?
     ): CordaFuture<FlowStateMachine<A>> {
         return startFlowInternal(
                 flowId,
@@ -261,7 +268,8 @@ class SingleThreadedStateMachineManager(
                 flowLogic = flowLogic,
                 flowStart = FlowStart.Explicit,
                 ourIdentity = ourIdentity ?: ourFirstIdentity,
-                deduplicationHandler = deduplicationHandler
+                deduplicationHandler = deduplicationHandler,
+                clientUUID = clientUUID
         )
     }
 
@@ -495,7 +503,8 @@ class SingleThreadedStateMachineManager(
                 event.flowLogic,
                 event.context,
                 ourIdentity = null,
-                deduplicationHandler = event.deduplicationHandler
+                deduplicationHandler = event.deduplicationHandler,
+                clientUUID = event.clientId
         )
         event.wireUpFuture(future)
     }
@@ -632,7 +641,8 @@ class SingleThreadedStateMachineManager(
             flowLogic: FlowLogic<A>,
             flowStart: FlowStart,
             ourIdentity: Party,
-            deduplicationHandler: DeduplicationHandler?
+            deduplicationHandler: DeduplicationHandler?,
+            clientUUID: UUID? = null
     ): CordaFuture<FlowStateMachine<A>> {
 
         val flowAlreadyExists = mutex.locked { flows[flowId] != null }
@@ -657,7 +667,17 @@ class SingleThreadedStateMachineManager(
             null
         }
 
-        val flow = flowCreator.createFlowFromLogic(flowId, invocationContext, flowLogic, flowStart, ourIdentity, existingCheckpoint, deduplicationHandler, ourSenderUUID)
+        val flow = flowCreator.createFlowFromLogic(
+            flowId,
+            invocationContext,
+            flowLogic,
+            flowStart,
+            ourIdentity,
+            existingCheckpoint,
+            deduplicationHandler,
+            ourSenderUUID,
+            clientUUID
+        )
         val startedFuture = openFuture<Unit>()
         mutex.locked {
             startedFutures[flowId] = startedFuture
@@ -795,6 +815,11 @@ class SingleThreadedStateMachineManager(
                 if (oldFlow == null) {
                     incrementLiveFibers()
                     unfinishedFibers.countUp()
+                    // putting in clientIdFutures only the very first future should be OK, since we are backed from capturing it from newer futures,
+                    // in case of retrying from previous checkpoint.
+                    flow.fiber.clientUUID?.let {
+                        clientIdFutures.put(it, flow.resultFuture)
+                    }
                 } else {
                     oldFlow.resultFuture.captureLater(flow.resultFuture)
                 }
