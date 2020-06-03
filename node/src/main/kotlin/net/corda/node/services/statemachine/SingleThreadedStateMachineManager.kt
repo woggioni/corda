@@ -255,21 +255,21 @@ class SingleThreadedStateMachineManager(
     }
 
     private fun <A> startFlow(
+            clientUUID: UUID?,
             flowId: StateMachineRunId,
             flowLogic: FlowLogic<A>,
             context: InvocationContext,
             ourIdentity: Party?,
-            deduplicationHandler: DeduplicationHandler?,
-            clientUUID: UUID?
+            deduplicationHandler: DeduplicationHandler?
     ): CordaFuture<FlowStateMachine<A>> {
         return startFlowInternal(
+                clientUUID,
                 flowId,
                 invocationContext = context,
                 flowLogic = flowLogic,
                 flowStart = FlowStart.Explicit,
                 ourIdentity = ourIdentity ?: ourFirstIdentity,
-                deduplicationHandler = deduplicationHandler,
-                clientUUID = clientUUID
+                deduplicationHandler = deduplicationHandler
         )
     }
 
@@ -499,12 +499,12 @@ class SingleThreadedStateMachineManager(
 
     private fun <T> onExternalStartFlow(event: ExternalEvent.ExternalStartFlowEvent<T>) {
         val future = startFlow(
+                event.clientId,
                 event.flowId,
                 event.flowLogic,
                 event.context,
                 ourIdentity = null,
-                deduplicationHandler = event.deduplicationHandler,
-                clientUUID = event.clientId
+                deduplicationHandler = event.deduplicationHandler
         )
         event.wireUpFuture(future)
     }
@@ -625,6 +625,7 @@ class SingleThreadedStateMachineManager(
         val flowStart = FlowStart.Initiated(peerSession, initiatedSessionId, initiatingMessage, senderCoreFlowVersion, initiatedFlowInfo)
         val ourIdentity = ourFirstIdentity
         startFlowInternal(
+                null,
                 flowId,
                 InvocationContext.peer(peerSession.counterparty.name),
                 flowLogic,
@@ -636,13 +637,13 @@ class SingleThreadedStateMachineManager(
 
     @Suppress("LongParameterList")
     private fun <A> startFlowInternal(
+            clientUUID: UUID?,
             flowId: StateMachineRunId,
             invocationContext: InvocationContext,
             flowLogic: FlowLogic<A>,
             flowStart: FlowStart,
             ourIdentity: Party,
-            deduplicationHandler: DeduplicationHandler?,
-            clientUUID: UUID? = null
+            deduplicationHandler: DeduplicationHandler?
     ): CordaFuture<FlowStateMachine<A>> {
 
         val flowAlreadyExists = mutex.locked { flows[flowId] != null }
@@ -668,6 +669,7 @@ class SingleThreadedStateMachineManager(
         }
 
         val flow = flowCreator.createFlowFromLogic(
+            clientUUID,
             flowId,
             invocationContext,
             flowLogic,
@@ -675,8 +677,7 @@ class SingleThreadedStateMachineManager(
             ourIdentity,
             existingCheckpoint,
             deduplicationHandler,
-            ourSenderUUID,
-            clientUUID
+            ourSenderUUID
         )
         val startedFuture = openFuture<Unit>()
         mutex.locked {
