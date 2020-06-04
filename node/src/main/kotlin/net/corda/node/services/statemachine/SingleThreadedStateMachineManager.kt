@@ -54,6 +54,7 @@ import java.lang.Integer.min
 import java.security.SecureRandom
 import java.time.Duration
 import java.util.HashSet
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -106,7 +107,7 @@ class SingleThreadedStateMachineManager(
 
         // first attempt; a naive solution in which we just keep futures in memory until client will acknowledge
         // flows results/ exceptions held to be available to clients upon request, even after flows' lifetime.
-        val clientIdFutures = HashMap<String, OpenFuture<Any?>>()
+        val clientIdFutures = HashMap<UUID, OpenFuture<Any?>>()
     }
 
     private val mutex = ThreadBox(InnerState())
@@ -254,7 +255,7 @@ class SingleThreadedStateMachineManager(
     }
 
     private fun <A> startFlow(
-            clientUUID: String?,
+            clientUUID: UUID?,
             flowId: StateMachineRunId,
             flowLogic: FlowLogic<A>,
             context: InvocationContext,
@@ -636,7 +637,7 @@ class SingleThreadedStateMachineManager(
 
     @Suppress("LongParameterList")
     private fun <A> startFlowInternal(
-            clientUUID: String?,
+            clientUUID: UUID?,
             flowId: StateMachineRunId,
             invocationContext: InvocationContext,
             flowLogic: FlowLogic<A>,
