@@ -37,7 +37,7 @@ pipeline {
                             "-Ddocker.container.env.parameter.CORDA_USE_CACHE=\"${CORDA_USE_CACHE}\" " +
                             "-Ddocker.container.env.parameter.CORDA_ARTIFACTORY_USERNAME=\"\${ARTIFACTORY_CREDENTIALS_USR}\" " +
                             "-Ddocker.container.env.parameter.CORDA_ARTIFACTORY_PASSWORD=\"\${ARTIFACTORY_CREDENTIALS_PSW}\" " +
-                            " clean jar deployNodes install pushBuildImage --stacktrace"
+                            " clean pushBuildImage --stacktrace"
                 }
                 sh "kubectl auth can-i get pods"
             }
