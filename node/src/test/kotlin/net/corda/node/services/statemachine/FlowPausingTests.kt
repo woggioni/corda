@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.Suspendable
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.whenever
 import net.corda.core.flows.FlowLogic
-import net.corda.core.internal.FlowStateMachine
+import net.corda.core.internal.FlowStateMachineHandle
 import net.corda.node.services.config.NodeConfiguration
 import net.corda.testing.core.ALICE_NAME
 import net.corda.testing.core.BOB_NAME
@@ -51,7 +51,7 @@ class FlowPausingTests {
 
     @Test(timeout = 300_000)
     fun `All are paused when the node is restarted in safe start mode`() {
-        val flows = ArrayList<FlowStateMachine<Unit>>()
+        val flows = ArrayList<FlowStateMachineHandle<Unit>>()
         for (i in 1..NUMBER_OF_FLOWS) {
             flows += aliceNode.services.startFlow(CheckpointingFlow())
         }
