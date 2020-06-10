@@ -15,6 +15,7 @@ import net.corda.core.identity.Party
 import net.corda.core.internal.FlowStateMachine
 import net.corda.core.internal.FlowStateMachineHandle
 import net.corda.core.internal.ThreadBox
+import net.corda.core.internal.VisibleForTesting
 import net.corda.core.internal.bufferUntilSubscribed
 import net.corda.core.internal.castIfPossible
 import net.corda.core.internal.concurrent.OpenFuture
@@ -84,6 +85,9 @@ class SingleThreadedStateMachineManager(
 ) : StateMachineManager, StateMachineManagerInternal {
     companion object {
         private val logger = contextLogger()
+
+        @VisibleForTesting
+        var onClientIDNotFound: (() -> Unit)? = null
     }
 
     private data class ScheduledTimeout(
@@ -273,7 +277,9 @@ class SingleThreadedStateMachineManager(
                         override val resultFuture: CordaFuture<A> = future as OpenFuture<A>
                         override val clientID: String? = clientID
                     })
-                }
+                } ?:
+                onClientIDNotFound?.invoke()
+                null
             }
         } ?: startFlowInternal(
             flowId,
