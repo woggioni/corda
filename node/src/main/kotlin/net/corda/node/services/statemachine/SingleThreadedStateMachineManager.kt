@@ -277,9 +277,10 @@ class SingleThreadedStateMachineManager(
                         override val resultFuture: CordaFuture<A> = future as OpenFuture<A>
                         override val clientID: String? = clientID
                     })
-                } ?:
-                onClientIDNotFound?.invoke()
-                null
+                } ?: {
+                    onClientIDNotFound?.invoke()
+                    null
+                }.invoke()
             }
         } ?: startFlowInternal(
             flowId,
