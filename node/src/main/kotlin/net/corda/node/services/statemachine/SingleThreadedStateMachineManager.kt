@@ -278,18 +278,21 @@ class SingleThreadedStateMachineManager(
                         override val clientID: String? = clientID
                     })
                 } ?: {
-                    onClientIDNotFound?.invoke()
+                    clientIDsToFlowIds.putIfAbsent(clientID, Pair(flowId, openFuture()))
                     null
                 }.invoke()
             }
-        } ?: startFlowInternal(
-            flowId,
-            invocationContext = context,
-            flowLogic = flowLogic,
-            flowStart = FlowStart.Explicit,
-            ourIdentity = ourIdentity ?: ourFirstIdentity,
-            deduplicationHandler = deduplicationHandler
-        )
+        } ?: {
+            onClientIDNotFound?.invoke()
+            startFlowInternal(
+                flowId,
+                invocationContext = context,
+                flowLogic = flowLogic,
+                flowStart = FlowStart.Explicit,
+                ourIdentity = ourIdentity ?: ourFirstIdentity,
+                deduplicationHandler = deduplicationHandler
+            )
+        }.invoke()
     }
 
     override fun killFlow(id: StateMachineRunId): Boolean {
@@ -822,9 +825,8 @@ class SingleThreadedStateMachineManager(
                 if (oldFlow == null) {
                     incrementLiveFibers()
                     unfinishedFibers.countUp()
-                    // just point to new flow in clientIDsToFlowIds to allow previous one to get GCed
                     flow.fiber.clientID?.let {
-                        clientIDsToFlowIds[it] = Pair(id, flow.resultFuture)
+                        clientIDsToFlowIds[it]!!.second.captureLater(flow.resultFuture)
                     }
                 } else {
                     oldFlow.resultFuture.captureLater(flow.resultFuture)
