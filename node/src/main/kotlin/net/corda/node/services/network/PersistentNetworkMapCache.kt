@@ -1,5 +1,6 @@
 package net.corda.node.services.network
 
+import net.corda.core.CordaRuntimeException
 import net.corda.core.crypto.SecureHash
 import net.corda.core.crypto.toStringShort
 import net.corda.core.identity.AbstractParty
@@ -48,7 +49,7 @@ open class PersistentNetworkMapCache(cacheFactory: NamedCacheFactory,
 
     private val _changed = PublishSubject.create<MapChange>()
     // We use assignment here so that multiple subscribers share the same wrapped Observable.
-    override val changed: Observable<MapChange> = _changed.wrapWithDatabaseTransaction()
+    override val changed: Observable<MapChange> = _changed.wrapWithDatabaseTransaction(database)
     private val changePublisher: rx.Observer<MapChange> get() = _changed.bufferUntilDatabaseCommit()
 
     override val nodeReady: OpenFuture<Void?> = openFuture()
@@ -99,6 +100,9 @@ open class PersistentNetworkMapCache(cacheFactory: NamedCacheFactory,
 
     override fun getPartyInfo(party: Party): PartyInfo? {
         val nodes = getNodesByLegalIdentityKey(party.owningKey)
+        if(nodes.size==0){
+            throw PartyNotFoundException("Could not find party: $party", party.name)
+        }
         if (nodes.size == 1 && nodes[0].isLegalIdentity(party)) {
             return PartyInfo.SingleNode(party, nodes[0].addresses)
         }
@@ -125,7 +129,9 @@ open class PersistentNetworkMapCache(cacheFactory: NamedCacheFactory,
         return database.transaction { queryByLegalName(session, name) }.sortedByDescending { it.serial }
     }
 
-    override fun getNodesByLegalIdentityKey(identityKey: PublicKey): List<NodeInfo> = nodesByKeyCache[identityKey]!!
+    override fun getNodesByLegalIdentityKey(identityKey: PublicKey): List<NodeInfo> = nodesByKeyCache[identityKey]!! //?: throw PartyNotFoundException("Could not find party.")
+
+    class PartyNotFoundException(message: String, val party: CordaX500Name) : CordaRuntimeException(message)
 
     private val nodesByKeyCache = NonInvalidatingCache<PublicKey, List<NodeInfo>>(
             cacheFactory = cacheFactory,
