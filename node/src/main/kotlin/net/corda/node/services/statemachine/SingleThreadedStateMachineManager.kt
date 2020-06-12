@@ -87,6 +87,8 @@ class SingleThreadedStateMachineManager(
         private val logger = contextLogger()
 
         @VisibleForTesting
+        var beforeClientIDCheck: (() -> Unit)? = null
+        @VisibleForTesting
         var onClientIDNotFound: (() -> Unit)? = null
     }
 
@@ -110,7 +112,7 @@ class SingleThreadedStateMachineManager(
         val timedFlows = HashMap<StateMachineRunId, ScheduledTimeout>()
 
         // first iteration for Map<clientID, flowId> mapping (simple one, not injectable)
-        val clientIDsToFlowIds = HashMap<String, Pair<StateMachineRunId, OpenFuture<Any?>>>()
+        val clientIDsToFlowIds = HashMap<String, OpenFuture<FlowStateMachine<*>>>()
     }
 
     private val mutex = ThreadBox(InnerState())
@@ -264,35 +266,37 @@ class SingleThreadedStateMachineManager(
             ourIdentity: Party?,
             deduplicationHandler: DeduplicationHandler?
     ): CordaFuture<out FlowStateMachineHandle<A>> {
-        // if clientID exists in clientIDsToFlowIds then the flow is already thrown in the system,
-        // therefore just return its future here and don't go any further down
-        return context.clientID?.let { clientID ->
+        beforeClientIDCheck?.invoke()
+
+        val clientID = context.clientID
+        if (clientID != null) {
             mutex.locked {
                 clientIDsToFlowIds[clientID]?.let {
-                    val id = it.first
-                    val future = it.second
-                    doneFuture(object : FlowStateMachineHandle<A> {
-                        override val logic: Nothing? = null
-                        override val id: StateMachineRunId = id
-                        override val resultFuture: CordaFuture<A> = future as OpenFuture<A>
-                        override val clientID: String? = clientID
-                    })
-                } ?: {
-                    clientIDsToFlowIds.putIfAbsent(clientID, Pair(flowId, openFuture()))
-                    null
-                }.invoke()
+                    // if clientID exists in clientIDsToFlowIds then the flow is already thrown in the system,
+                    // therefore just return its future here and don't go any further down
+                    return@startFlow it as CordaFuture<FlowStateMachine<A>>
+                } ?: clientIDsToFlowIds.putIfAbsent(clientID, openFuture())
             }
-        } ?: {
+
+            // (testing) client id exists but is not present in the map
             onClientIDNotFound?.invoke()
-            startFlowInternal(
-                flowId,
-                invocationContext = context,
-                flowLogic = flowLogic,
-                flowStart = FlowStart.Explicit,
-                ourIdentity = ourIdentity ?: ourFirstIdentity,
-                deduplicationHandler = deduplicationHandler
-            )
-        }.invoke()
+        }
+
+        return startFlowInternal(
+            flowId,
+            invocationContext = context,
+            flowLogic = flowLogic,
+            flowStart = FlowStart.Explicit,
+            ourIdentity = ourIdentity ?: ourFirstIdentity,
+            deduplicationHandler = deduplicationHandler
+        ).also {
+            if (clientID != null) {
+                // wire up this future to the clientIDsToFlowIds[clientID] future
+                mutex.locked {
+                    clientIDsToFlowIds[clientID]!!.captureLater(it)
+                }
+            }
+        }
     }
 
     override fun killFlow(id: StateMachineRunId): Boolean {
@@ -825,9 +829,6 @@ class SingleThreadedStateMachineManager(
                 if (oldFlow == null) {
                     incrementLiveFibers()
                     unfinishedFibers.countUp()
-                    flow.fiber.clientID?.let {
-                        clientIDsToFlowIds[it]!!.second.captureLater(flow.resultFuture)
-                    }
                 } else {
                     oldFlow.resultFuture.captureLater(flow.resultFuture)
                 }
