@@ -409,13 +409,14 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
     enum class Diagnosis {
         /** The flow should not see other staff members */
         TERMINAL,
+        /** The flow should wait until the network map is refreshed. */
+        WAITING_FOR_NETWORK_MAP_REFRESH,
         /** Retry from last safe point. */
         DISCHARGE,
         /** Park and await intervention. */
         OVERNIGHT_OBSERVATION,
         /** Please try another member of staff. */
-        NOT_MY_SPECIALTY,
-        WAITING_FOR_NETWORK_MAP_REFRESH
+        NOT_MY_SPECIALTY
     }
 
     interface Staff {
