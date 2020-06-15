@@ -107,7 +107,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
     //when the update completes we start the processing of the updated nodes
     private fun checkNodesWaitingForRefresh(update: Boolean) {
         nodesWaitingForNetworkMapRefresh.forEach { patient ->
-            val flowFiber = flowsInHospital[patient.value]!!
+            val flowFiber = flowsInHospital[patient.value] ?: return
 
             val eventToExecute = if (currentUpdates.any { it == patient.key }) {
                 Event.RetryFlowFromSafePoint
@@ -655,7 +655,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
             if(newError is PersistentNetworkMapCache.PartyNotFoundException) {
                 log.info("Adding to waiting for network map refresh")
                 nodesWaitingForNetworkMapRefresh[newError.party!!] = flowFiber.id
-                Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
+                return Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
             }
             return Diagnosis.NOT_MY_SPECIALTY
         }
