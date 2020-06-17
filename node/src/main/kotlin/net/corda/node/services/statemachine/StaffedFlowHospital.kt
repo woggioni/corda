@@ -118,7 +118,6 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
 
                 flowFiber.scheduleEvent(eventToExecute)
                 leave(p)
-                currentUpdates.clear()
             }
             nodesWaitingForNetworkMapRefresh.remove(patient.key)
         }
