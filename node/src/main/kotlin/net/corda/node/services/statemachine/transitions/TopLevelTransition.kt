@@ -14,7 +14,6 @@ import net.corda.node.services.statemachine.ExistingSessionMessage
 import net.corda.node.services.statemachine.FlowRemovalReason
 import net.corda.node.services.statemachine.FlowSessionImpl
 import net.corda.node.services.statemachine.FlowState
-import net.corda.node.services.statemachine.InitiatedSessionState
 import net.corda.node.services.statemachine.SenderDeduplicationId
 import net.corda.node.services.statemachine.SessionId
 import net.corda.node.services.statemachine.SessionState
@@ -262,8 +261,8 @@ class TopLevelTransition(
 
     private fun TransitionBuilder.sendEndMessages() {
         val sendEndMessageActions = currentState.checkpoint.checkpointState.sessions.values.mapIndexed { index, state ->
-            if (state is SessionState.Initiated && state.initiatedState is InitiatedSessionState.Live) {
-                val message = ExistingSessionMessage(state.initiatedState.peerSinkSessionId, EndSessionMessage)
+            if (state is SessionState.Initiated) {
+                val message = ExistingSessionMessage(state.peerSinkSessionId, EndSessionMessage)
                 val deduplicationId = DeduplicationId.createForNormal(currentState.checkpoint, index, state)
                 Action.SendExisting(state.peerParty, message, SenderDeduplicationId(deduplicationId, currentState.senderUUID))
             } else {
