@@ -72,7 +72,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
         @VisibleForTesting
         val onFlowAdmitted = mutableListOf<(id: StateMachineRunId) -> Unit>()
 
-        val nodesWaitingForNetworkMapRefresh = ConcurrentHashMap<CordaX500Name, MutableSet<StateMachineRunId>>()
+        val nodesWaitingForNetworkMapRefresh = ConcurrentHashMap<CordaX500Name, ConcurrentHashMap<StateMachineRunId, Boolean>>()
 
         //storing the updates from the network map refresh
         private val currentUpdates = mutableListOf<CordaX500Name>()
@@ -106,9 +106,11 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
 
     //when the update completes we start the processing of the updated nodes
     private fun checkNodesWaitingForRefresh(update: Boolean) {
-        nodesWaitingForNetworkMapRefresh.forEach { patient ->
-            for(p in patient.value) {
-                val flowFiber = flowsInHospital[p] ?: return
+        val it = nodesWaitingForNetworkMapRefresh.iterator()
+        while (it.hasNext()) {
+            val patient = it.next()
+            for(runId in patient.value) {
+                val flowFiber = flowsInHospital[runId.key] ?: return
 
                 val eventToExecute = if (currentUpdates.any { it == patient.key }) {
                     Event.RetryFlowFromSafePoint
@@ -117,9 +119,9 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
                 }
 
                 flowFiber.scheduleEvent(eventToExecute)
-                leave(p)
+                leave(runId.key)
             }
-            nodesWaitingForNetworkMapRefresh.remove(patient.key)
+            it.remove()
         }
         currentUpdates.clear()
     }
@@ -244,6 +246,8 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
         }
     }
 
+    private data class EventOutcome(val outcome: Outcome, val event: Event, val duration: Duration)
+
     @Suppress("ComplexMethod")
     private fun admit(flowFiber: FlowFiber, currentState: StateMachineState, errors: List<Throwable>) {
         val time = clock.instant()
@@ -260,24 +264,24 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
                     val backOff = calculateBackOffForChronicCondition(report, medicalHistory, currentState)
                     log.info("Flow error discharged from hospital (delay ${backOff.seconds}s) by ${report.by} (error was ${report.error.message})")
                     onFlowDischarged.forEach { hook -> hook.invoke(flowFiber.id, report.by.map{it.toString()}) }
-                    Triple(Outcome.DISCHARGE, Event.RetryFlowFromSafePoint, backOff)
+                    EventOutcome(Outcome.DISCHARGE, Event.RetryFlowFromSafePoint, backOff)
                 }
                 //tricky part: the flows which has [WAITING_FOR_NETWORK_MAP_REFRESH] as [Diagnosis] needs to be processed here
                 //marking it with [RetryFlowFromSafePoint] temporarily, but we are actually not going to kick off the events
                 Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH -> {
                     log.info("Flow error is waiting for networkmap refresh (error was ${report.error.message})")
-                    Triple(Outcome.WAITING_FOR_NETWORK_MAP_REFRESH, Event.RetryFlowFromSafePoint, 0.seconds)
+                    EventOutcome(Outcome.WAITING_FOR_NETWORK_MAP_REFRESH, Event.RetryFlowFromSafePoint, 0.seconds)
                 }
                 Diagnosis.OVERNIGHT_OBSERVATION -> {
                     log.info("Flow error kept for overnight observation by ${report.by} (error was ${report.error.message})")
                     // We don't schedule a next event for the flow - it will automatically retry from its checkpoint on node restart
                     onFlowKeptForOvernightObservation.forEach { hook -> hook.invoke(flowFiber.id, report.by.map{it.toString()}) }
-                    Triple(Outcome.OVERNIGHT_OBSERVATION, Event.OvernightObservation, 0.seconds)
+                    EventOutcome(Outcome.OVERNIGHT_OBSERVATION, Event.OvernightObservation, 0.seconds)
                 }
                 Diagnosis.NOT_MY_SPECIALTY, Diagnosis.TERMINAL -> {
                     // None of the staff care for these errors, or someone decided it is a terminal condition, so we let them propagate
                     log.info("Flow error allowed to propagate", report.error)
-                    Triple(Outcome.UNTREATABLE, Event.StartErrorPropagation, 0.seconds)
+                    EventOutcome(Outcome.UNTREATABLE, Event.StartErrorPropagation, 0.seconds)
                 }
             }
 
@@ -657,7 +661,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
                              history: FlowMedicalHistory): Diagnosis {
             if(newError is PersistentNetworkMapCache.PartyNotFoundException) {
                 log.info("Adding to waiting for network map refresh")
-                nodesWaitingForNetworkMapRefresh.getOrPut(newError.party) { mutableSetOf() }.add(flowFiber.id)
+                nodesWaitingForNetworkMapRefresh.getOrPut(newError.party) { ConcurrentHashMap() }.put(flowFiber.id, true)
                 return Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
             }
             return Diagnosis.NOT_MY_SPECIALTY
