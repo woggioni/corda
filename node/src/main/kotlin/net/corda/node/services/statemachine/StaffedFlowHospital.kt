@@ -72,7 +72,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
         @VisibleForTesting
         val onFlowAdmitted = mutableListOf<(id: StateMachineRunId) -> Unit>()
 
-        val nodesWaitingForNetworkMapRefresh = ConcurrentHashMap<CordaX500Name, StateMachineRunId>()
+        val nodesWaitingForNetworkMapRefresh = ConcurrentHashMap<CordaX500Name, MutableSet<StateMachineRunId>>()
 
         //storing the updates from the network map refresh
         private val currentUpdates = mutableListOf<CordaX500Name>()
@@ -107,19 +107,22 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
     //when the update completes we start the processing of the updated nodes
     private fun checkNodesWaitingForRefresh(update: Boolean) {
         nodesWaitingForNetworkMapRefresh.forEach { patient ->
-            val flowFiber = flowsInHospital[patient.value] ?: return
+            for(p in patient.value) {
+                val flowFiber = flowsInHospital[p] ?: return
 
-            val eventToExecute = if (currentUpdates.any { it == patient.key }) {
-                Event.RetryFlowFromSafePoint
-            } else {
-                Event.StartErrorPropagation
+                val eventToExecute = if (currentUpdates.any { it == patient.key }) {
+                    Event.RetryFlowFromSafePoint
+                } else {
+                    Event.StartErrorPropagation
+                }
+
+                flowFiber.scheduleEvent(eventToExecute)
+                leave(p)
+                currentUpdates.clear()
             }
-
-            flowFiber.scheduleEvent(eventToExecute)
-            leave(patient.value)
             nodesWaitingForNetworkMapRefresh.remove(patient.key)
-            currentUpdates.clear()
         }
+        currentUpdates.clear()
     }
 
     fun startNetworkMapSubscribe() {
@@ -655,7 +658,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
                              history: FlowMedicalHistory): Diagnosis {
             if(newError is PersistentNetworkMapCache.PartyNotFoundException) {
                 log.info("Adding to waiting for network map refresh")
-                nodesWaitingForNetworkMapRefresh[newError.party!!] = flowFiber.id
+                nodesWaitingForNetworkMapRefresh.getOrPut(newError.party) { mutableSetOf() }.add(flowFiber.id)
                 return Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
             }
             return Diagnosis.NOT_MY_SPECIALTY
