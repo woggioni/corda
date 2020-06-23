@@ -47,6 +47,9 @@ Cert path: $fullCertPath
 @CordaSerializable
 class SignedDataWithCert<T : Any>(val raw: SerializedBytes<T>, val sig: DigitalSignatureWithCert): NamedByHash {
     override val id: SecureHash get () = raw.hash
+    init {
+        sig.verify(raw)
+    }
 
     fun verified(): T {
         sig.verify(raw)
