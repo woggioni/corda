@@ -6,6 +6,7 @@ import net.corda.core.flows.FlowSession
 import net.corda.core.flows.InitiatedBy
 import net.corda.core.flows.InitiatingFlow
 import net.corda.core.flows.StartableByRPC
+import net.corda.core.flows.StateMachineRunId
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.identity.Party
 import net.corda.core.internal.list
@@ -147,6 +148,40 @@ abstract class StatemachineErrorHandlingTest {
             }
             StaffedFlowHospital.onFlowKeptForOvernightObservation.add { _, _ ->
                 ++observationCounter
+            }
+        }
+    }
+
+    @StartableByRPC
+    @InitiatingFlow
+    class SendAMessageAndLookIntoHospitalFlow(private val party: Party) : FlowLogic<RefreshData>() {
+        @Suspendable
+        override fun call(): RefreshData {
+            val session = initiateFlow(party)
+            session.send("hello there")
+            return RefreshData("Finished executing test flow - ${this.runId}",
+                    serviceHub.cordaService(Hospital::class.java).dataMap)
+        }
+    }
+
+    @InitiatedBy(SendAMessageAndLookIntoHospitalFlow::class)
+    class SendAMessageResponderP(private val session: FlowSession) : FlowLogic<Unit>() {
+        @Suspendable
+        override fun call() {
+            session.receive<String>().unwrap { it }
+        }
+    }
+
+    @CordaSerializable
+    data class RefreshData(val message: String, val data: Map<StateMachineRunId, List<String>>)
+
+    @Suppress("UNUSED_PARAMETER")
+    @CordaService
+    class Hospital(services: AppServiceHub) : SingletonSerializeAsToken() {
+        val dataMap = mutableMapOf<StateMachineRunId, List<String>>()
+        init {
+            StaffedFlowHospital.onFlowKeptForWaitingForNetworkMapRefresh.add { id, by ->
+                dataMap[id] = by
             }
         }
     }

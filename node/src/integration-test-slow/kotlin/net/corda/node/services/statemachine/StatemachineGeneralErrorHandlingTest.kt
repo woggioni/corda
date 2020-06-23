@@ -1,10 +1,12 @@
 package net.corda.node.services.statemachine
 
 import net.corda.client.rpc.CordaRPCClient
+import net.corda.core.identity.CordaX500Name
 import net.corda.core.messaging.startFlow
 import net.corda.core.utilities.getOrThrow
 import net.corda.core.utilities.seconds
 import net.corda.node.services.messaging.DeduplicationHandler
+import net.corda.node.services.network.PersistentNetworkMapCache
 import net.corda.node.services.statemachine.transitions.TopLevelTransition
 import net.corda.testing.core.ALICE_NAME
 import net.corda.testing.core.CHARLIE_NAME
@@ -1276,6 +1278,48 @@ class StatemachineGeneralErrorHandlingTest : StatemachineErrorHandlingTest() {
             assertEquals(1, aliceClient.startFlow(StatemachineErrorHandlingTest::GetNumberOfUncompletedCheckpointsFlow).returnValue.get())
             // 1 for GetNumberOfCheckpointsFlow
             assertEquals(1, charlieClient.startFlow(StatemachineErrorHandlingTest::GetNumberOfUncompletedCheckpointsFlow).returnValue.get())
+        }
+    }
+
+    @Test(timeout=300_000)
+    fun `party not found in network map then do recycle`() {
+        startDriver {
+            val charlie = createNode(CHARLIE_NAME)
+            val alice = createBytemanNode(ALICE_NAME)
+
+            val rules = """
+                RULE Create Counter
+                CLASS ${PersistentNetworkMapCache::class.java.name}
+                METHOD getPartyInfo
+                AT ENTRY
+                IF createCounter("counter", $counter)
+                DO traceln("Counter created")
+                ENDRULE
+                
+                RULE Set flag when getPartyInfo
+                CLASS ${PersistentNetworkMapCache::class.java.name}
+                METHOD getPartyInfo
+                AT ENTRY
+                IF readCounter("counter") < 1
+                DO incrementCounter("counter"); traceln("Setting flag to true and throwing exception"); throw new ${PersistentNetworkMapCache.PartyNotFoundException::class.java.name}("Some message", new ${CordaX500Name::class.java.simpleName}("Charlie Ltd", "Athens", "GR"))
+                ENDRULE
+            """.trimIndent()
+
+            submitBytemanRules(rules)
+
+            val aliceClient =
+                    CordaRPCClient(alice.rpcAddress).start(rpcUser.username, rpcUser.password).proxy
+
+            val flow = aliceClient.startFlow(StatemachineErrorHandlingTest::SendAMessageAndLookIntoHospitalFlow,
+                    charlie.nodeInfo.singleIdentity())
+
+            val result = flow.returnValue.get()
+            assertEquals("Finished executing test flow - ${flow.id}", result.message)
+            assertEquals(flow.id, result.data.keys.first())
+            assertEquals(
+                    StaffedFlowHospital.AnonymousPsychiatrist.toString().substringBefore("@"),
+                    result.data.values.first().first().substringBefore("@")
+            )
         }
     }
 }
