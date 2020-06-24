@@ -61,8 +61,6 @@ include 'tools:network-builder'
 include 'tools:cliutils'
 include 'tools:worldmap'
 include 'tools:checkpoint-agent'
-include 'example-code'
-project(':example-code').projectDir = file("$settingsDir/docs/source/example-code")
 include 'samples:attachment-demo:contracts'
 include 'samples:attachment-demo:workflows'
 include 'samples:trader-demo:workflows-trader'
@@ -106,7 +104,6 @@ include 'core-deterministic:testing:data'
 include 'core-deterministic:testing:verifier'
 include 'serialization-deterministic'
 
-include 'tools:checkpoint-agent'
 include 'detekt-plugins'
 include 'tools:error-tool'
 
