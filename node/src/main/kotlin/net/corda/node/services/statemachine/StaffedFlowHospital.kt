@@ -101,7 +101,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
     }
 
     //when the update completes we start the processing of the nodes
-    private fun checkNodesWaitingForRefresh(update: Boolean) {
+    private fun checkNodesWaitingForRefresh(@Suppress("UNUSED_PARAMETER") update: Boolean) {
         for ((name, flows) in nodesWaitingForNetworkMapRefresh) {
             if (networkMapCacheInternal!!.getNodeByLegalName(name) != null) {
                 prepareEvents(flows, "Party is now in network map, retrying", Event.RetryFlowFromSafePoint)
