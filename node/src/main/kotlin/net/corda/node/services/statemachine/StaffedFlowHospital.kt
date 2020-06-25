@@ -290,12 +290,12 @@ class StaffedFlowHospital(
             Triple(event, backOffForChronicCondition, outcome)
         }
 
-        event?.let { it ->
+        event?.let {
             if (backOffForChronicCondition.isZero) {
-                flowFiber.scheduleEvent(it)
+                flowFiber.scheduleEvent(event)
             } else {
                 hospitalJobTimer.schedule(timerTask {
-                    flowFiber.scheduleEvent(it)
+                    flowFiber.scheduleEvent(event)
                 }, backOffForChronicCondition.toMillis())
             }
         }
