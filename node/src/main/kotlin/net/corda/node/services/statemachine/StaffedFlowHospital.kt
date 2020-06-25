@@ -24,7 +24,7 @@ import net.corda.core.utilities.seconds
 import net.corda.node.services.FinalityHandler
 import net.corda.node.services.api.NetworkMapCacheInternal
 import net.corda.node.services.network.NetworkMapUpdater
-import net.corda.node.services.network.PersistentNetworkMapCache
+import net.corda.node.services.network.PartyNotFoundException
 import org.hibernate.exception.ConstraintViolationException
 import rx.subjects.PublishSubject
 import java.io.Closeable
@@ -43,11 +43,13 @@ import kotlin.math.pow
  * This hospital consults "staff" to see if they can automatically diagnose and treat flows.
  */
 @Suppress("TooManyFunctions")
-class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
-                          private val clock: Clock,
-                          private val ourSenderUUID: String,
-                          private val networkMapCacheInternal: NetworkMapCacheInternal? = null,
-                          private val networkMapUpdater: NetworkMapUpdater? = null) : Closeable {
+class StaffedFlowHospital(
+        private val flowMessaging: FlowMessaging,
+        private val clock: Clock,
+        private val ourSenderUUID: String,
+        private val networkMapCacheInternal: NetworkMapCacheInternal,
+        private val networkMapUpdater: NetworkMapUpdater
+) : Closeable {
     companion object {
         private val log = contextLogger()
         private val staff = listOf(
@@ -103,24 +105,25 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
     //when the update completes we start the processing of the nodes
     private fun checkNodesWaitingForRefresh(@Suppress("UNUSED_PARAMETER") update: Boolean) {
         for ((name, flows) in nodesWaitingForNetworkMapRefresh) {
-            if (networkMapCacheInternal!!.getNodeByLegalName(name) != null) {
-                prepareEvents(flows, "Party is now in network map, retrying", Event.RetryFlowFromSafePoint)
+            if (networkMapCacheInternal.getNodeByLegalName(name) != null) {
+                scheduleEvents(flows, "Party: $name is now in network map, retrying, runID: ", Event.RetryFlowFromSafePoint)
             } else {
-                prepareEvents(flows, "Party still not in network map, propagating error", Event.StartErrorPropagation)
+                scheduleEvents(flows, "Party: $name still not in network map, propagating error, runID: ", Event.StartErrorPropagation)
             }
         }
     }
 
-    private fun prepareEvents(flows: Set<StateMachineRunId>, message: String, event: Event) {
-        for ( runId in flows) {
-            val flowFiber = flowsInHospital[runId] ?: return
-            log.info(message)
-            flowFiber.scheduleEvent(event)
+    private fun scheduleEvents(flows: Set<StateMachineRunId>, message: String, event: Event) {
+        for (runId in flows) {
+            flowsInHospital[runId]?.let { fiber ->
+                log.info(message + runId)
+                fiber.scheduleEvent(event)
+            }
         }
     }
 
-    fun startNetworkMapSubscribe() {
-        networkMapUpdater?.updateComplete?.subscribe(::checkNodesWaitingForRefresh)
+    fun start() {
+        networkMapUpdater.updateComplete.subscribe(::checkNodesWaitingForRefresh)
     }
 
     /**
@@ -240,7 +243,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
         }
     }
 
-    private data class EventOutcome(val outcome: Outcome, val event: Event, val duration: Duration)
+    private data class EventOutcome(val outcome: Outcome, val event: Event?, val duration: Duration)
 
     @Suppress("ComplexMethod")
     private fun admit(flowFiber: FlowFiber, currentState: StateMachineState, errors: List<Throwable>) {
@@ -265,7 +268,7 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
                 Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH -> {
                     log.info("Flow error is waiting for networkmap refresh (error was ${report.error.message})")
                     onFlowKeptForWaitingForNetworkMapRefresh.forEach { hook -> hook.invoke(flowFiber.id, report.by.map{it.toString()}) }
-                    EventOutcome(Outcome.WAITING_FOR_NETWORK_MAP_REFRESH, Event.RetryFlowFromSafePoint, 0.seconds)
+                    EventOutcome(Outcome.WAITING_FOR_NETWORK_MAP_REFRESH, null, 0.seconds)
                 }
                 Diagnosis.OVERNIGHT_OBSERVATION -> {
                     log.info("Flow error kept for overnight observation by ${report.by} (error was ${report.error.message})")
@@ -287,12 +290,12 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
             Triple(event, backOffForChronicCondition, outcome)
         }
 
-        if(outcome != Outcome.WAITING_FOR_NETWORK_MAP_REFRESH) {
+        event?.let { it ->
             if (backOffForChronicCondition.isZero) {
-                flowFiber.scheduleEvent(event)
+                flowFiber.scheduleEvent(it)
             } else {
                 hospitalJobTimer.schedule(timerTask {
-                    flowFiber.scheduleEvent(event)
+                    flowFiber.scheduleEvent(it)
                 }, backOffForChronicCondition.toMillis())
             }
         }
@@ -654,12 +657,14 @@ class StaffedFlowHospital(private val flowMessaging: FlowMessaging,
                              currentState: StateMachineState,
                              newError: Throwable,
                              history: FlowMedicalHistory): Diagnosis {
-            if(newError is PersistentNetworkMapCache.PartyNotFoundException) {
+            return if(newError is StateTransitionException && newError.mentionsThrowable(PartyNotFoundException::class.java)) {
                 log.info("Adding to waiting for network map refresh")
-                nodesWaitingForNetworkMapRefresh.getOrPut(newError.party) { Collections.synchronizedSet(HashSet<StateMachineRunId>()) }.add(flowFiber.id)
-                return Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
+                val error = newError.exception as PartyNotFoundException
+                nodesWaitingForNetworkMapRefresh.getOrPut(error.party) { Collections.synchronizedSet(HashSet()) }.add(flowFiber.id)
+                Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
+            } else {
+                Diagnosis.NOT_MY_SPECIALTY
             }
-            return Diagnosis.NOT_MY_SPECIALTY
         }
     }
 }

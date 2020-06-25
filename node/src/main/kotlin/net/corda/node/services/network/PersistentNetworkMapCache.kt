@@ -1,6 +1,5 @@
 package net.corda.node.services.network
 
-import net.corda.core.CordaRuntimeException
 import net.corda.core.crypto.SecureHash
 import net.corda.core.crypto.toStringShort
 import net.corda.core.identity.AbstractParty
@@ -100,20 +99,11 @@ open class PersistentNetworkMapCache(cacheFactory: NamedCacheFactory,
 
     override fun getPartyInfo(party: Party): PartyInfo? {
         val nodes = getNodesByLegalIdentityKey(party.owningKey)
-        if(nodes.size==0){
-            throw PartyNotFoundException("Could not find party: $party", party.name)
+        return when {
+            nodes.isEmpty() -> throw PartyNotFoundException("Could not find party: $party", party.name)
+            nodes.size == 1 && nodes[0].isLegalIdentity(party) -> PartyInfo.SingleNode(party, nodes[0].addresses)
+            else -> nodes.firstOrNull { it.isLegalIdentity(party) }?.let { PartyInfo.DistributedNode(party) }
         }
-        if (nodes.size == 1 && nodes[0].isLegalIdentity(party)) {
-            return PartyInfo.SingleNode(party, nodes[0].addresses)
-        }
-        for (node in nodes) {
-            for (identity in node.legalIdentities) {
-                if (identity == party) {
-                    return PartyInfo.DistributedNode(party)
-                }
-            }
-        }
-        return null
     }
 
     override fun getNodeByLegalName(name: CordaX500Name): NodeInfo? {
@@ -129,9 +119,7 @@ open class PersistentNetworkMapCache(cacheFactory: NamedCacheFactory,
         return database.transaction { queryByLegalName(session, name) }.sortedByDescending { it.serial }
     }
 
-    override fun getNodesByLegalIdentityKey(identityKey: PublicKey): List<NodeInfo> = nodesByKeyCache[identityKey]!! //?: throw PartyNotFoundException("Could not find party.")
-
-    class PartyNotFoundException(message: String, val party: CordaX500Name) : CordaRuntimeException(message)
+    override fun getNodesByLegalIdentityKey(identityKey: PublicKey): List<NodeInfo> = nodesByKeyCache[identityKey]!!
 
     private val nodesByKeyCache = NonInvalidatingCache<PublicKey, List<NodeInfo>>(
             cacheFactory = cacheFactory,

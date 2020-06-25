@@ -169,7 +169,7 @@ class SingleThreadedStateMachineManager(
                 ::resetCustomTimeout)
 
         val fibers = restoreFlowsFromCheckpoints()
-        flowHospital.startNetworkMapSubscribe()
+        flowHospital.start()
         metrics.register("Flows.InFlight", Gauge<Int> { mutex.content.flows.size })
         Fiber.setDefaultUncaughtExceptionHandler { fiber, throwable ->
             if (throwable is VirtualMachineError) {

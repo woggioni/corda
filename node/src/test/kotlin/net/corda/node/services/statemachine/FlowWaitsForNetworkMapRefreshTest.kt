@@ -12,7 +12,7 @@ import net.corda.core.messaging.startFlow
 import net.corda.core.utilities.getOrThrow
 import net.corda.core.utilities.unwrap
 import net.corda.node.services.Permissions
-import net.corda.node.services.network.PersistentNetworkMapCache
+import net.corda.node.services.network.PartyNotFoundException
 import net.corda.testing.core.ALICE_NAME
 import net.corda.testing.core.BOB_NAME
 import net.corda.testing.core.BOC_NAME
@@ -54,7 +54,7 @@ class FlowWaitsForNetworkMapRefreshTest {
             val nodeCHandle = startNode(providedName = ALICE_NAME, rpcUsers = listOf(user)).getOrThrow()
 
             // Party wasn't added to network map, error propagation should start
-            assertFailsWith<PersistentNetworkMapCache.PartyNotFoundException> {
+            assertFailsWith<StateTransitionException> {
                 nodeCHandle.rpc.startFlow(::HelloFlow).returnValue.getOrThrow()
             }
 
@@ -94,7 +94,8 @@ class FlowWaitsForNetworkMapRefreshTest {
         override fun call(): String {
             if(counter == 0) {
                 counter += 1
-                throw PersistentNetworkMapCache.PartyNotFoundException("Could not find party: $CHARLIE_NAME", CHARLIE_NAME)
+                val pnfe = PartyNotFoundException("Could not find party: $CHARLIE_NAME", CHARLIE_NAME)
+                throw StateTransitionException(pnfe)
             }
             val partySession = initiateFlow(p)
             partySession.send("hi there")

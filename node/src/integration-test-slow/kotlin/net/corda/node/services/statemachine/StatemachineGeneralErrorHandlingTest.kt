@@ -7,6 +7,7 @@ import net.corda.core.utilities.getOrThrow
 import net.corda.core.utilities.seconds
 import net.corda.node.services.api.CheckpointStorage
 import net.corda.node.services.messaging.DeduplicationHandler
+import net.corda.node.services.network.PartyNotFoundException
 import net.corda.node.services.network.PersistentNetworkMapCache
 import net.corda.node.services.statemachine.transitions.TopLevelTransition
 import net.corda.testing.core.ALICE_NAME
@@ -1738,7 +1739,9 @@ class StatemachineGeneralErrorHandlingTest : StatemachineErrorHandlingTest() {
                 METHOD getPartyInfo
                 AT ENTRY
                 IF readCounter("counter") < 1
-                DO incrementCounter("counter"); traceln("Setting flag to true and throwing exception"); throw new ${PersistentNetworkMapCache.PartyNotFoundException::class.java.name}("Some message", new ${CordaX500Name::class.java.simpleName}("Charlie Ltd", "Athens", "GR"))
+                DO incrementCounter("counter"); 
+                traceln("Setting flag to true and throwing exception"); 
+                throw new ${PartyNotFoundException::class.java.name}("Some message", new ${CordaX500Name::class.java.simpleName}("Charlie Ltd", "Athens", "GR"))
                 ENDRULE
             """.trimIndent()
 
