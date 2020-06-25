@@ -76,8 +76,6 @@ class StaffedFlowHospital(
 
         @VisibleForTesting
         val onFlowAdmitted = mutableListOf<(id: StateMachineRunId) -> Unit>()
-
-        val nodesWaitingForNetworkMapRefresh = ConcurrentHashMap<CordaX500Name, MutableSet<StateMachineRunId>>()
     }
 
     private val hospitalJobTimer = Timer("FlowHospitalJobTimer", true)
@@ -104,11 +102,13 @@ class StaffedFlowHospital(
 
     //when the update completes we start the processing of the nodes
     private fun checkNodesWaitingForRefresh(@Suppress("UNUSED_PARAMETER") update: Boolean) {
-        for ((name, flows) in nodesWaitingForNetworkMapRefresh) {
-            if (networkMapCacheInternal.getNodeByLegalName(name) != null) {
-                scheduleEvents(flows, "Party: $name is now in network map, retrying, runID: ", Event.RetryFlowFromSafePoint)
-            } else {
-                scheduleEvents(flows, "Party: $name still not in network map, propagating error, runID: ", Event.StartErrorPropagation)
+        mutex.locked {
+            for ((name, flows) in nodesWaitingForNetworkMapRefresh) {
+                if (networkMapCacheInternal.getNodeByLegalName(name) != null) {
+                    scheduleEvents(flows, "Party: $name is now in network map, retrying, runID: ", Event.RetryFlowFromSafePoint)
+                } else {
+                    scheduleEvents(flows, "Party: $name still not in network map, propagating error, runID: ", Event.StartErrorPropagation)
+                }
             }
         }
     }
@@ -144,6 +144,7 @@ class StaffedFlowHospital(
         val flowPatients = HashMap<StateMachineRunId, FlowMedicalHistory>()
         val treatableSessionInits = HashMap<StateMachineRunId, InternalSessionInitRecord>()
         val recordsPublisher = PublishSubject.create<MedicalRecord>()
+        val nodesWaitingForNetworkMapRefresh = HashMap<CordaX500Name, MutableSet<StateMachineRunId>>()
     })
     private val secureRandom = newSecureRandom()
 
@@ -268,6 +269,7 @@ class StaffedFlowHospital(
                 Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH -> {
                     log.info("Flow error is waiting for networkmap refresh (error was ${report.error.message})")
                     onFlowKeptForWaitingForNetworkMapRefresh.forEach { hook -> hook.invoke(flowFiber.id, report.by.map{it.toString()}) }
+                    nodesWaitingForNetworkMapRefresh.getOrPut((report.error.cause as PartyNotFoundException).party) { HashSet() }.add(flowFiber.id)
                     EventOutcome(Outcome.WAITING_FOR_NETWORK_MAP_REFRESH, null, 0.seconds)
                 }
                 Diagnosis.OVERNIGHT_OBSERVATION -> {
@@ -658,9 +660,8 @@ class StaffedFlowHospital(
                              newError: Throwable,
                              history: FlowMedicalHistory): Diagnosis {
             return if(newError is StateTransitionException && newError.mentionsThrowable(PartyNotFoundException::class.java)) {
-                log.info("Adding to waiting for network map refresh")
-                val error = newError.exception as PartyNotFoundException
-                nodesWaitingForNetworkMapRefresh.getOrPut(error.party) { Collections.synchronizedSet(HashSet()) }.add(flowFiber.id)
+                val pnfe = newError.exception as PartyNotFoundException
+                log.info("Adding to waiting for network map refresh: ${pnfe.party}")
                 Diagnosis.WAITING_FOR_NETWORK_MAP_REFRESH
             } else {
                 Diagnosis.NOT_MY_SPECIALTY
