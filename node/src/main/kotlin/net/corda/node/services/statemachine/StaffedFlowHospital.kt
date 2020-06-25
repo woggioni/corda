@@ -252,7 +252,7 @@ class StaffedFlowHospital(
         log.info("Flow ${flowFiber.id} admitted to hospital in state $currentState")
         onFlowAdmitted.forEach { it.invoke(flowFiber.id) }
 
-        val (event, backOffForChronicCondition, outcome) = mutex.locked {
+        val (_, event, backOffForChronicCondition) = mutex.locked {
             val medicalHistory = flowPatients.computeIfAbsent(flowFiber.id) { FlowMedicalHistory() }
 
             val report = consultStaff(flowFiber, currentState, errors, medicalHistory)
@@ -289,7 +289,7 @@ class StaffedFlowHospital(
             val record = MedicalRecord.Flow(time, flowFiber.id, numberOfSuspends, errors, report.by, outcome)
             medicalHistory.records += record
             recordsPublisher.onNext(record)
-            Triple(event, backOffForChronicCondition, outcome)
+            EventOutcome(outcome, event, backOffForChronicCondition)
         }
 
         event?.let {
