@@ -157,6 +157,8 @@ internal class CordaRPCOpsImpl(
 
     override fun dumpCheckpoints() = checkpointDumper.dumpCheckpoints()
 
+    override fun debugCheckpoints() = checkpointDumper.debugCheckpoints()
+
     override val attachmentTrustInfos: List<AttachmentTrustInfo>
         get() {
             return services.attachmentTrustCalculator.calculateAllTrustInfo()

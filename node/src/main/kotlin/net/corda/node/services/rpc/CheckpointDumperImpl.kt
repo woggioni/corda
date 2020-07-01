@@ -33,7 +33,6 @@ import net.corda.core.flows.FlowSession
 import net.corda.core.flows.StateMachineRunId
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.identity.Party
-import net.corda.core.node.AppServiceHub.Companion.SERVICE_PRIORITY_NORMAL
 import net.corda.core.internal.FlowAsyncOperation
 import net.corda.core.internal.FlowIORequest
 import net.corda.core.internal.WaitForStateConsumption
@@ -43,6 +42,7 @@ import net.corda.core.internal.exists
 import net.corda.core.internal.objectOrNewInstance
 import net.corda.core.internal.outputStream
 import net.corda.core.internal.uncheckedCast
+import net.corda.core.node.AppServiceHub.Companion.SERVICE_PRIORITY_NORMAL
 import net.corda.core.node.ServiceHub
 import net.corda.core.serialization.SerializeAsToken
 import net.corda.core.serialization.SerializedBytes
@@ -54,9 +54,6 @@ import net.corda.core.utilities.NonEmptySet
 import net.corda.core.utilities.ProgressTracker
 import net.corda.core.utilities.Try
 import net.corda.core.utilities.contextLogger
-import net.corda.nodeapi.internal.lifecycle.NodeLifecycleEvent
-import net.corda.nodeapi.internal.lifecycle.NodeLifecycleObserver
-import net.corda.nodeapi.internal.lifecycle.NodeLifecycleObserver.Companion.reportSuccess
 import net.corda.node.internal.NodeStartup
 import net.corda.node.services.api.CheckpointStorage
 import net.corda.node.services.statemachine.Checkpoint
@@ -69,29 +66,39 @@ import net.corda.node.services.statemachine.SessionId
 import net.corda.node.services.statemachine.SessionState
 import net.corda.node.services.statemachine.SubFlow
 import net.corda.node.utilities.JVMAgentUtil.getJvmAgentProperties
+import net.corda.nodeapi.internal.lifecycle.NodeLifecycleEvent
+import net.corda.nodeapi.internal.lifecycle.NodeLifecycleObserver
+import net.corda.nodeapi.internal.lifecycle.NodeLifecycleObserver.Companion.reportSuccess
 import net.corda.nodeapi.internal.persistence.CordaPersistence
 import net.corda.serialization.internal.CheckpointSerializeAsTokenContextImpl
 import net.corda.serialization.internal.withTokenContext
+import java.io.InputStream
+import java.nio.file.FileSystems
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneOffset.UTC
 import java.time.format.DateTimeFormatter
-import java.util.UUID
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.zip.CRC32
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
+import kotlin.streams.asSequence
 
 class CheckpointDumperImpl(private val checkpointStorage: CheckpointStorage, private val database: CordaPersistence,
-                                    private val serviceHub: ServiceHub, val baseDirectory: Path) : NodeLifecycleObserver {
+                           private val serviceHub: ServiceHub, val baseDirectory: Path,
+                           private val cordappDirectories: Iterable<Path>) : NodeLifecycleObserver {
     companion object {
         internal val TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss").withZone(UTC)
         private val log = contextLogger()
         private val DUMPABLE_CHECKPOINTS = setOf(
-            Checkpoint.FlowStatus.RUNNABLE,
-            Checkpoint.FlowStatus.HOSPITALIZED,
-            Checkpoint.FlowStatus.PAUSED
+                Checkpoint.FlowStatus.RUNNABLE,
+                Checkpoint.FlowStatus.HOSPITALIZED,
+                Checkpoint.FlowStatus.PAUSED
         )
     }
 
@@ -107,7 +114,7 @@ class CheckpointDumperImpl(private val checkpointStorage: CheckpointStorage, pri
     }
 
     override fun update(nodeLifecycleEvent: NodeLifecycleEvent): Try<String> {
-        return when(nodeLifecycleEvent) {
+        return when (nodeLifecycleEvent) {
             is NodeLifecycleEvent.AfterNodeStart<*> -> Try.on {
                 checkpointSerializationContext = CheckpointSerializationDefaults.CHECKPOINT_CONTEXT.withTokenContext(
                         CheckpointSerializeAsTokenContextImpl(
@@ -164,6 +171,100 @@ class CheckpointDumperImpl(private val checkpointStorage: CheckpointStorage, pri
                                 zip.putNextEntry(ZipEntry(fileName))
                                 zip.write(bytes)
                                 zip.closeEntry()
+                            }
+                        }
+                    }
+                }
+            } else {
+                log.info("Flow dump already in progress, skipping current call")
+            }
+        } finally {
+            lock.decrementAndGet()
+        }
+    }
+
+    fun debugCheckpoints() {
+        val now = serviceHub.clock.instant()
+        val file = baseDirectory / NodeStartup.LOGS_DIRECTORY_NAME / "checkpoints_debug-${TIME_FORMATTER.format(now)}.zip"
+        try {
+            if (lock.getAndIncrement() == 0 && !file.exists()) {
+                database.transaction {
+                    checkpointStorage.getCheckpoints(DUMPABLE_CHECKPOINTS).use { stream ->
+                        ZipOutputStream(file.outputStream()).use { zip ->
+                            stream.map {
+                                it.first to it.second.deserialize(checkpointSerializationContext).flowState
+                            }.forEach { (runId, flowState) ->
+                                if (flowState is FlowState.Started) {
+                                    val fiber = flowState.frozenFiber.checkpointDeserialize(context = checkpointSerializationContext)
+                                    try {
+                                        ZipEntry("fibers/${fiber.logic.javaClass.name}-${runId.uuid}.fiber").apply {
+                                            method = ZipEntry.DEFLATED
+                                        }
+                                    } catch (e: Exception) {
+                                        log.error("Failed to deserialise checkpoint with flowId: ${runId.uuid}", e)
+                                        null
+                                    }?.let { zipEntry ->
+                                        zip.putNextEntry(zipEntry)
+                                        zip.write(flowState.frozenFiber.bytes)
+                                        zip.closeEntry()
+                                    }
+                                }
+                            }
+                            val buffer = ByteArray(0x10000)
+                            val sizeAndCrc = { inputStream : InputStream ->
+                                val crc32 = CRC32()
+                                var sz = 0L
+                                while (true) {
+                                    val read = inputStream.read(buffer)
+                                    if (read < 0) break
+                                    sz += read
+                                    crc32.update(buffer, 0, read)
+                                }
+                                sz to crc32.value
+                            }
+                            val write2zip = { inputStream : InputStream ->
+                                while (true) {
+                                    val read = inputStream.read(buffer)
+                                    if (read < 0) break
+                                    zip.write(buffer, 0, read)
+                                }
+                            }
+                            cordappDirectories.asSequence()
+                                    .flatMap {
+                                        Files.list(it)
+                                                .filter { directoryEntry -> directoryEntry.fileName.toString().endsWith(".jar") }
+                                                .asSequence()
+                                    }.forEach { corDappJar ->
+                                        val zipEntry = ZipEntry("cordapps/${corDappJar.fileName}").apply {
+                                            val (sz, crc32) = Files.newInputStream(corDappJar).use(sizeAndCrc)
+                                            method = ZipEntry.STORED
+                                            size = sz
+                                            compressedSize = sz
+                                            crc = crc32
+                                        }
+                                        zip.putNextEntry(zipEntry)
+                                        Files.newInputStream(corDappJar).use(write2zip)
+                                        zip.closeEntry()
+                                    }
+                            val cordaJar = Paths.get(System.getProperty("capsule.jar"))
+                            mapOf(
+                                "lib" to FileSystems.newFileSystem(cordaJar, null).getPath("/"),
+                                "drivers" to baseDirectory.resolve("drivers")
+                            ).forEach { (dest, source) ->
+                                Files.list(source).filter { directoryEntry ->
+                                    directoryEntry.fileName.toString().endsWith(".jar")
+                                }.forEach { jarEntry ->
+                                    val zipEntry = ZipEntry("$dest/${jarEntry.fileName}").apply {
+                                        val (sz, crc32) = Files.newInputStream(jarEntry).use(sizeAndCrc)
+                                        method = ZipEntry.STORED
+                                        size = sz
+                                        compressedSize = sz
+                                        crc = crc32
+                                    }
+                                    zip.putNextEntry(zipEntry)
+                                    Files.newInputStream(jarEntry).use(write2zip)
+                                    zip.closeEntry()
+                                }
                             }
                         }
                     }
@@ -402,6 +503,7 @@ class CheckpointDumperImpl(private val checkpointStorage: CheckpointStorage, pri
     private interface FlowAsyncOperationMixin {
         @get:JsonIgnore
         val serviceHub: ServiceHub
+
         // [Any] used so this single mixin can serialize [FlowExternalOperation] and [FlowExternalAsyncOperation]
         @get:JsonUnwrapped
         val operation: Any

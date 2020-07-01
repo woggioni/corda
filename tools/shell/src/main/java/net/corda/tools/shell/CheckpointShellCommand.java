@@ -16,4 +16,11 @@ public class CheckpointShellCommand extends InteractiveShellCommand {
     public void dump() {
         runDumpCheckpoints(ops());
     }
+
+    @Command
+    @Man("Outputs the contents of all started flow checkpoints in a zip file")
+    @Usage("Outputs the contents of all started flow checkpoints in a zip file")
+    public void debug() {
+        runDebugCheckpoints(ops());
+    }
 }
