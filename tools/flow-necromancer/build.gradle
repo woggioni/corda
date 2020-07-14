@@ -3,10 +3,30 @@ plugins {
 }
 
 dependencies {
-    compile project(':serialization')
-    compile project(':node-api')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compileOnly project(':serialization')
+    compileOnly project(':node')
+    compileOnly project(':node-api')
+
+    compileOnly "net.corda:splitcorda-workflows:0.0.1"
     compile files("${System.properties['java.home']}/../lib/tools.jar")
+
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
 }
 
-mainClassName = "net.corda.flow.necromancer.FlowLoader"
+mainClassName = "net.corda.flow.necromancer.MainKt"
 
+test {
+    test {
+        useJUnitPlatform()
+    }
+}
+
+[JavaExec, Test].forEach {
+    project.tasks.withType(it).configureEach {
+        doFirst {
+//            jvmArgs "-Djava.system.class.loader=net.corda.flow.necromancer.DumpClassLoader"
+        }
+    }
+}
