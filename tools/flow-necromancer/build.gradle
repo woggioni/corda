@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'maven-publish'
 }
 
 dependencies {
@@ -8,11 +9,8 @@ dependencies {
     compileOnly project(':node')
     compileOnly project(':node-api')
 
-    compileOnly "net.corda:splitcorda-workflows:0.0.1"
-    compile files("${System.properties['java.home']}/../lib/tools.jar")
-
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.2'
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.2'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junit_jupiter_version
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junit_jupiter_version
 }
 
 mainClassName = "net.corda.flow.necromancer.MainKt"
@@ -27,6 +25,27 @@ test {
     project.tasks.withType(it).configureEach {
         doFirst {
 //            jvmArgs "-Djava.system.class.loader=net.corda.flow.necromancer.DumpClassLoader"
+        }
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    compile sourcesJar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = groupId
+            artifactId = 'corda-tools-flow-necromancer'
+            version = project.version
+            from components.java
+            artifact(sourcesJar)
         }
     }
 }

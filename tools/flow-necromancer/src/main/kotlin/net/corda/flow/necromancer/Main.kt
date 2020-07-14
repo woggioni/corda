@@ -28,28 +28,35 @@ import java.lang.reflect.Proxy
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.util.*
 import java.util.zip.ZipInputStream
+import kotlin.Comparator
 import kotlin.streams.asSequence
 
-//fun main(args: Array<String>) {
-//    val runtimeMxBean = ManagementFactory.getRuntimeMXBean()
-//    val arguments = runtimeMxBean.inputArguments
-//    println(arguments)
-//
-//    val flowLoader = FlowLoader.instance!!
-//    flowLoader.useArchive(Paths.get("/home/r3/checkpoints_debug.zip")) {
-//        val cl = loadClass("org.slf4j.LoggerFactory")
-//        val fl = loadClass("org.slf4j.helpers.NOPLogger")
-//        val fiberFile = fibers().first()
-//        val fib = fiber(fiberFile) as Fiber<*>
-//        Fiber.unparkDeserialized(fib, DefaultFiberScheduler.getInstance())
-//        val cls2 = fib.javaClass
-//        println(cls2)
-//
-//    }
-//}
+private class JavaProcessBuilder(private val mainClass: String) {
+    var javaHome = System.getProperty("java.home")
+    var classPath = System.getProperty("java.class.path")
+    var properties = Properties()
+    var cliArgs: Array<out String>? = null
+    var jvmArgs : List<String> = emptyList()
 
-class Bar(archivePath: Path) : AutoCloseable {
+    fun exec(customize: ProcessBuilder.() -> Unit = {}): Process {
+        val javaBin = Paths.get(javaHome, "bin", "java")
+        val propertySequence = properties.let {
+            it.entries.asSequence()
+        }.map { entry ->
+            String.format("-D%s=%s", entry.key, entry.value)
+        }
+        val cmd: List<String> = (sequenceOf(javaBin.toString(), "-cp", classPath) +
+                jvmArgs.asSequence() +
+                propertySequence +
+                sequenceOf(mainClass) +
+                (cliArgs?.asSequence() ?: emptySequence<String>())).toList()
+        return ProcessBuilder(cmd).also(customize).start()
+    }
+}
+
+class FlowNecromancer(archivePath: Path) : AutoCloseable {
     companion object {
         private val quasarAgentArgs = """x(antlr**;bftsmart**;co.pa
             ralleluniverse**;com.codahale**;com.esotericsoftware**;com.fasterxml*
@@ -65,19 +72,6 @@ class Bar(archivePath: Path) : AutoCloseable {
             thub.classgraph**)l(net.corda.djvm.**;net.corda.core.serialization.in
             ternal.**)
         """.replace("\n", "").replace(" ", "")
-
-        private fun startQuasarAgent(archivePath: Path, temporaryDir: Path) {
-            synchronized(this) {
-                val quasarJar = Files.list(temporaryDir.resolve("lib")).asSequence().firstOrNull {
-                    it.fileName.toString().startsWith("quasar-core")
-                } ?: throw RuntimeException("Quasar jar not found in $archivePath")
-                val nameOfRunningVM = ManagementFactory.getRuntimeMXBean().name
-                val pid = nameOfRunningVM.substring(0, nameOfRunningVM.indexOf('@'))
-                val vm = VirtualMachine.attach(pid)
-                vm.loadAgent(quasarJar.toString(), quasarAgentArgs)
-                vm.detach()
-            }
-        }
 
         private fun extract(archivePath: Path, destination: Path) {
             val buffer = ByteArray(0x10000)
@@ -108,7 +102,7 @@ class Bar(archivePath: Path) : AutoCloseable {
     }
 
     val temporaryDir: Path
-    val processBuilder: JavaProcessBuilder
+    private val processBuilder: JavaProcessBuilder
 
     init {
         temporaryDir = Files.createTempDirectory("flowLoader")
@@ -135,7 +129,7 @@ class Bar(archivePath: Path) : AutoCloseable {
 
         processBuilder = JavaProcessBuilder(Bootstrapper::class.java.name).apply {
             classPath = (jars.asSequence() + sequenceOf(temporaryDir.resolve("classes"))).joinToString(System.getProperty("path.separator"))
-            jvmArgs = listOf("-javaagent:" + jars.first { it.fileName.toString().startsWith("quasar-core") })
+            jvmArgs = listOf("-javaagent:" + jars.first { it.fileName.toString().startsWith("quasar-core") } + "=" + quasarAgentArgs)
         }
     }
 
@@ -145,7 +139,7 @@ class Bar(archivePath: Path) : AutoCloseable {
                 .filter { it.endsWith(".fiber") }
 
     var debugPort: Short? = null
-    var suspend = false
+    var suspend = true
 
     fun revive(fiberName: String) {
         processBuilder.properties.setProperty("net.corda.flow.necromancer.tmp.dir", temporaryDir.toString())
@@ -169,7 +163,7 @@ class Bar(archivePath: Path) : AutoCloseable {
     }
 }
 
-class Bootstrapper {
+private class Bootstrapper {
     companion object {
         private inline fun <reified T> newProxyObject(crossinline methodInvocation: (proxy: Any?, method: Method, args: Array<Any?>?) -> Any) =
                 Proxy.newProxyInstance(T::class.javaClass.classLoader, arrayOf<Class<*>>(T::class.java)) { proxy, method, args ->
@@ -227,7 +221,7 @@ fun main(args: Array<String>) {
 
     val p = Paths.get("/home/r3/checkpoints_debug.zip")
 
-    Bar(p).use { b ->
+    FlowNecromancer(p).use { b ->
         b.debugPort = 4444
         b.suspend = true
         val fiberName = b.fibers.first()
