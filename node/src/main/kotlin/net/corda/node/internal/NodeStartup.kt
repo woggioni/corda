@@ -28,7 +28,6 @@ import net.corda.node.internal.subcommands.ValidateConfigurationCli.Companion.lo
 import net.corda.node.services.config.NodeConfiguration
 import net.corda.node.services.config.shouldStartLocalShell
 import net.corda.node.services.config.shouldStartSSHDaemon
-import net.corda.node.utilities.JVMAgentUtil.getJvmAgentProperties
 import net.corda.node.utilities.registration.NodeRegistrationException
 import net.corda.nodeapi.internal.addShutdownHook
 import net.corda.nodeapi.internal.persistence.CouldNotCreateDataSourceException
@@ -153,6 +152,27 @@ open class NodeStartup : NodeStartupLogging {
         const val LOGS_DIRECTORY_NAME = "logs"
         const val LOGS_CAN_BE_FOUND_IN_STRING = "Logs can be found in"
         const val ERROR_CODE_RESOURCE_LOCATION = "error-codes"
+
+        @VisibleForTesting
+        @Suppress("NestedBlockDepth")
+        fun parseDebugPort(args : Iterable<String>) : Short? {
+            val debugArgumentPrefix = "-agentlib:jdwp="
+            for(arg in args) {
+                if(arg.startsWith(debugArgumentPrefix)) {
+                    var cursor = debugArgumentPrefix.length + 1
+                    while(cursor < arg.length) {
+                        val nextEqual = arg.indexOf('=', cursor)
+                        if(nextEqual < 0) break
+                        val nextComma = arg.indexOf(',', nextEqual).takeIf { it > 0 } ?: arg.length
+                        val key = arg.substring(cursor, nextEqual)
+                        val value = arg.substring(nextEqual + 1, nextComma)
+                        if(key == "address") return value.toShort()
+                        else cursor = nextComma + 1
+                    }
+                }
+            }
+            return null
+        }
     }
 
     lateinit var cmdLineOptions: SharedNodeCmdLineOptions
@@ -269,10 +289,10 @@ open class NodeStartup : NodeStartupLogging {
         logger.info("VM ${info.vmName} ${info.vmVendor} ${info.vmVersion}")
         logger.info("Machine: ${lookupMachineNameAndMaybeWarn()}")
         logger.info("Working Directory: ${cmdLineOptions.baseDirectory}")
-        val agentProperties = getJvmAgentProperties(logger)
-        if (agentProperties.containsKey("sun.jdwp.listenerAddress")) {
-            logger.info("Debug port: ${agentProperties.getProperty("sun.jdwp.listenerAddress")}")
+        parseDebugPort(info.inputArguments) ?.let {
+            logger.info("Debug port: $it")
         }
+
         var nodeStartedMessage = "Starting as node on ${conf.p2pAddress}"
         if (conf.extraNetworkMapKeys.isNotEmpty()) {
             nodeStartedMessage = "$nodeStartedMessage with additional Network Map keys ${conf.extraNetworkMapKeys.joinToString(prefix = "[", postfix = "]", separator = ", ")}"
