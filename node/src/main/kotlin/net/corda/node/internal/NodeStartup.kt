@@ -158,15 +158,24 @@ open class NodeStartup : NodeStartupLogging {
         fun parseDebugPort(args : Iterable<String>) : Short? {
             val debugArgumentPrefix = "-agentlib:jdwp="
             for(arg in args) {
-                if(arg.startsWith(debugArgumentPrefix)) {
+                if(arg.indexOf(debugArgumentPrefix)) {
+                    for(keyValuePair in arg.substring(debugArgumentPrefix.length + 1).split(",")) {
+                        val equal = keyValuePair.indexOf('=')
+                        if(equal >= 0 && keyValuePair.startsWith("address")) {
+                            val portBegin = keyValuePair.indexOf(':', equal) + 1
+                        }
+                    }
                     var cursor = debugArgumentPrefix.length + 1
                     while(cursor < arg.length) {
                         val nextEqual = arg.indexOf('=', cursor)
                         if(nextEqual < 0) break
-                        val nextComma = arg.indexOf(',', nextEqual).takeIf { it > 0 } ?: arg.length
+                        val nextComma = arg.indexOf(',', nextEqual).takeUnless { it < 0 } ?: arg.length
                         val key = arg.substring(cursor, nextEqual)
                         val value = arg.substring(nextEqual + 1, nextComma)
-                        if(key == "address") return value.toShort()
+                        if(key == "address") {
+                            val portBegin = value.indexOf(':') + 1
+                            value.substring(portBegin)
+                        }
                         else cursor = nextComma + 1
                     }
                 }
