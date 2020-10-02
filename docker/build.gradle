@@ -59,44 +59,56 @@ final correttoBuildTags = ["corda/corda-corretto-java${JavaVersion.current()}-${
 
 task buildOfficialZuluDockerImage(type: DockerBuildImage, dependsOn: [buildDockerFolder]) {
     inputDir = dockerTempDir
-    tags = zuluBuildTags
+    images = zuluBuildTags
     dockerFile = new File(dockerTempDir, "Dockerfile")
 }
 
 task buildOfficialZuluJDK11DockerImage(type: DockerBuildImage, dependsOn: [buildDockerFolder]) {
     inputDir = dockerTempDir
-    tags = zuluBuildTags
+    images = zuluBuildTags
     dockerFile = new File(dockerTempDir, "Dockerfile11")
 }
 
 task buildOfficialCorrettoDockerImage(type: DockerBuildImage, dependsOn: [buildDockerFolder]) {
     inputDir = dockerTempDir
-    tags = correttoBuildTags
+    images = correttoBuildTags
     dockerFile = new File(dockerTempDir, "DockerfileAL")
 }
 
 task pushZuluTimeStampedTag('type': DockerPushImage, dependsOn: [buildOfficialZuluDockerImage]){
-    imageName = zuluBuildTags[0]
+    images.add(zuluBuildTags[0])
 }
 
 task pushZuluLatestTag('type': DockerPushImage, dependsOn: [buildOfficialZuluDockerImage]){
-    imageName = zuluBuildTags[1]
+    images.add(zuluBuildTags[1])
 }
 
 task pushZulu11TimeStampedTag('type': DockerPushImage, dependsOn: [buildOfficialZuluJDK11DockerImage]){
-    imageName = zuluBuildTags[0]
+    images.add(zuluBuildTags[0])
 }
 
 task pushZulu11LatestTag('type': DockerPushImage, dependsOn: [buildOfficialZuluJDK11DockerImage]){
-    imageName = zuluBuildTags[1]
+    images.add(zuluBuildTags[1])
 }
 
 task pushCorrettoTimeStampedTag('type': DockerPushImage, dependsOn: [buildOfficialCorrettoDockerImage]){
-    imageName = correttoBuildTags[0]
+    images.add(correttoBuildTags[0])
 }
 
 task pushCorrettoLatestTag('type': DockerPushImage, dependsOn: [buildOfficialCorrettoDockerImage]){
-    imageName = correttoBuildTags[1]
+    images.add(correttoBuildTags[1])
 }
 
 task pushOfficialImages(dependsOn: [pushZuluTimeStampedTag, pushZuluLatestTag, pushCorrettoTimeStampedTag, pushCorrettoLatestTag])
+
+final adoptopenjdkBuildTags = ["corda/corda-adoptopenjdk-java${JavaVersion.current()}-${project.version.toString().toLowerCase()}:${suffix}", "corda/corda-adoptopenjdk-java${JavaVersion.current()}-${project.version.toString().toLowerCase()}:latest"]
+
+task buildAdoptOpenJDK11OpenJ9DockerFolder(type: Copy, dependsOn: [buildDockerFolder]) {
+    into dockerTempDir
+    from "src/docker/Dockerfile11-openj9"
+}
+task buildAdoptOpenJDK11OpenJ9DockerImage(type: DockerBuildImage, dependsOn: [buildAdoptOpenJDK11OpenJ9DockerFolder]) {
+  inputDir = dockerTempDir
+  images = adoptopenjdkBuildTags
+  dockerFile = new File(dockerTempDir, "Dockerfile11-openj9")
+}

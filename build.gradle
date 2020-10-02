@@ -211,6 +211,7 @@ buildscript {
         classpath "net.i2p.crypto:eddsa:$eddsa_version" // Needed for ServiceIdentityGenerator in the build environment.
         classpath "org.owasp:dependency-check-gradle:${dependency_checker_version}"
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:$artifactory_plugin_version"
+        classpath "com.bmuschko:gradle-docker-plugin:6.6.1"
         // Capsule gradle plugin forked and maintained locally to support Gradle 5.x
         // See https://github.com/corda/gradle-capsule-plugin
         classpath "us.kirchmeier:gradle-capsule-plugin:1.0.4_r3"
@@ -340,9 +341,9 @@ allprojects {
             attributes('Corda-Docs-Link': corda_docs_link)
         }
     }
-    
+
     tasks.withType(Test).configureEach {
-        forkEvery = 20
+        forkEvery = 10
         ignoreFailures = project.hasProperty('tests.ignoreFailures') ? project.property('tests.ignoreFailures').toBoolean() : false
         failFast = project.hasProperty('tests.failFast') ? project.property('tests.failFast').toBoolean() : false
 
