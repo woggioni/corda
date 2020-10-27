@@ -1,0 +1,1412 @@
+# Project net.corda:corda-project:4.7-SNAPSHOT
+<table>
+  <thead>
+    <tr>
+      <th>JPMS friendly</th>
+      <th colspan='2'>Not JPMS friendly</th>
+      <th colspan='2'>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style='text-align: center;'>85</td>
+      <td style='text-align: center;' colspan='2'>113</td>
+      <td style='text-align: center;' colspan='2'>198</td>
+    </tr>
+  </tbody>
+  <thead>
+    <th>Name</th>
+    <th>Multi-release jar</th>
+    <th>Automatic-Module-Name</th>
+    <th>Module descriptor</th>
+    <th>JPMS friendly</th>
+  </thead>
+  <tbody>
+    <tr style='background-color:fdd;'>
+      <td>antlr.jar (antlr:antlr:2.7.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>quasar-core.jar (co.paralleluniverse:quasar-core:0.8.1_r3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>co.paralleluniverse.quasar.core</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kryo.jar (com.esotericsoftware:kryo:4.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>minlog.jar (com.esotericsoftware:minlog:1.3.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>reflectasm.jar (com.esotericsoftware:reflectasm:1.11.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jackson-annotations.jar (com.fasterxml.jackson.core:jackson-annotations:2.9.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jackson-core.jar (com.fasterxml.jackson.core:jackson-core:2.9.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.fasterxml.jackson.core</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jackson-databind.jar (com.fasterxml.jackson.core:jackson-databind:2.9.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.fasterxml.jackson.databind</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jackson-dataformat-yaml.jar (com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.fasterxml.jackson.dataformat.yaml</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jackson-datatype-jsr310.jar (com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.fasterxml.jackson.datatype.jsr310</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jackson-jaxrs-base.jar (com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.8.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jackson-jaxrs-json-provider.jar (com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jackson-module-jaxb-annotations.jar (com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jackson-module-kotlin.jar (com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.fasterxml.jackson.module.kotlin</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>classmate.jar (com.fasterxml:classmate:1.3.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.fasterxml.classmate</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>caffeine.jar (com.github.ben-manes.caffeine:caffeine:2.7.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.github.benmanes.caffeine</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>library.jar (com.github.bft-smart:library:master-v1.1-beta-g6215ec8-87)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jsr305.jar (com.google.code.findbugs:jsr305:3.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>error_prone_annotations.jar (com.google.errorprone:error_prone_annotations:2.3.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>failureaccess.jar (com.google.guava:failureaccess:1.0.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>guava.jar (com.google.guava:guava:28.0-jre)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.google.common</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>listenablefuture.jar (com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>j2objc-annotations.jar (com.google.j2objc:j2objc-annotations:1.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>json-simple.jar (com.googlecode.json-simple:json-simple:1.1.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>h2.jar (com.h2database:h2:1.4.199)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>com.h2database</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jcabi-log.jar (com.jcabi:jcabi-log:0.14)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jcabi-manifests.jar (com.jcabi:jcabi-manifests:1.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>disruptor.jar (com.lmax:disruptor:3.4.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>liquibase-slf4j.jar (com.mattbertolini:liquibase-slf4j:2.0.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>newrelic-api.jar (com.newrelic.agent.java:newrelic-api:3.10.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>metrics-new-relic.jar (com.palominolabs.metrics:metrics-new-relic:1.1.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>okhttp.jar (com.squareup.okhttp3:okhttp:3.14.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>okhttp3</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>okio.jar (com.squareup.okio:okio:1.17.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>okio</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>istack-commons-runtime.jar (com.sun.istack:istack-commons-runtime:3.0.7)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>FastInfoset.jar (com.sun.xml.fastinfoset:FastInfoset:1.2.15)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>config.jar (com.typesafe:config:1.3.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>typesafe.config</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>HikariCP.jar (com.zaxxer:HikariCP:3.3.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.zaxxer.hikari</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>commons-beanutils.jar (commons-beanutils:commons-beanutils:1.9.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>commons-codec.jar (commons-codec:commons-codec:1.13)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.commons.codec</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>commons-collections.jar (commons-collections:commons-collections:3.2.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>commons-fileupload.jar (commons-fileupload:commons-fileupload:1.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>commons-io.jar (commons-io:commons-io:2.6)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.commons.io</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kryo-serializers.jar (de.javakaffee:kryo-serializers:0.43)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>picocli.jar (info.picocli:picocli:3.9.6)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>info.picocli</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>catalyst-buffer.jar (io.atomix.catalyst:catalyst-buffer:1.1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>catalyst-common.jar (io.atomix.catalyst:catalyst-common:1.1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>catalyst-concurrent.jar (io.atomix.catalyst:catalyst-concurrent:1.1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>catalyst-netty.jar (io.atomix.catalyst:catalyst-netty:1.1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>catalyst-serializer.jar (io.atomix.catalyst:catalyst-serializer:1.1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>catalyst-transport.jar (io.atomix.catalyst:catalyst-transport:1.1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>copycat-client.jar (io.atomix.copycat:copycat-client:1.2.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>copycat-protocol.jar (io.atomix.copycat:copycat-protocol:1.2.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>copycat-server.jar (io.atomix.copycat:copycat-server:1.2.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>metrics-core.jar (io.dropwizard.metrics:metrics-core:4.1.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.codahale.metrics</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>metrics-jmx.jar (io.dropwizard.metrics:metrics-jmx:4.1.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>com.codahale.metrics.jmx</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>classgraph.jar (io.github.classgraph:classgraph:4.8.90)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-buffer.jar (io.netty:netty-buffer:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.buffer</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-codec-http.jar (io.netty:netty-codec-http:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.codec.http</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-codec-socks.jar (io.netty:netty-codec-socks:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.codec.socks</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-codec.jar (io.netty:netty-codec:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.codec</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-common.jar (io.netty:netty-common:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.common</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-handler-proxy.jar (io.netty:netty-handler-proxy:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.handler.proxy</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-handler.jar (io.netty:netty-handler:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.handler</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-resolver.jar (io.netty:netty-resolver:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.resolver</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-tcnative-boringssl-static.jar (io.netty:netty-tcnative-boringssl-static:2.0.29.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.tcnative.boringssl</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-transport-native-epoll-linux-x86_64.jar (io.netty:netty-transport-native-epoll:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.transport.epoll</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-transport-native-kqueue-osx-x86_64.jar (io.netty:netty-transport-native-kqueue:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.transport.kqueue</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-transport-native-unix-common.jar (io.netty:netty-transport-native-unix-common:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.transport.unix.common</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>netty-transport.jar (io.netty:netty-transport:4.1.46.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>io.netty.transport</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>rxjava.jar (io.reactivex:rxjava:1.3.8)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>javax.activation-api.jar (javax.activation:javax.activation-api:1.2.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>java.activation</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>javax.annotation-api.jar (javax.annotation:javax.annotation-api:1.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>javax.inject.jar (javax.inject:javax.inject:1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>javax.persistence-api.jar (javax.persistence:javax.persistence-api:2.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>java.persistence</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>javax.servlet-api.jar (javax.servlet:javax.servlet-api:4.0.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>validation-api.jar (javax.validation:validation-api:1.1.0.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>javax.ws.rs-api.jar (javax.ws.rs:javax.ws.rs-api:2.0.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jaxb-api.jar (javax.xml.bind:jaxb-api:2.3.1)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>byte-buddy.jar (net.bytebuddy:byte-buddy:1.9.10)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-djvm.jar (net.corda.djvm:corda-djvm:1.1.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.djvm</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>eddsa.jar (net.i2p.crypto:eddsa:0.3.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.i2p.crypto.eddsa</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jopt-simple.jar (net.sf.jopt-simple:jopt-simple:5.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jpam.jar (net.sf.jpam:jpam:1.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-amqp-protocol.jar (org.apache.activemq:artemis-amqp-protocol:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-commons.jar (org.apache.activemq:artemis-commons:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-core-client.jar (org.apache.activemq:artemis-core-client:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-jdbc-store.jar (org.apache.activemq:artemis-jdbc-store:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-jms-client.jar (org.apache.activemq:artemis-jms-client:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-journal.jar (org.apache.activemq:artemis-journal:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>artemis-native.jar (org.apache.activemq:artemis-native:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>artemis.jni</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-selector.jar (org.apache.activemq:artemis-selector:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>artemis-server.jar (org.apache.activemq:artemis-server:2.6.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>commons-collections4.jar (org.apache.commons:commons-collections4:4.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.commons.collections4</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>commons-lang3.jar (org.apache.commons:commons-lang3:3.9)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.commons.lang3</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>geronimo-jms_2.0_spec.jar (org.apache.geronimo.specs:geronimo-jms_2.0_spec:1.0-alpha-2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>geronimo-json_1.0_spec.jar (org.apache.geronimo.specs:geronimo-json_1.0_spec:1.0-alpha-1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>johnzon-core.jar (org.apache.johnzon:johnzon-core:0.9.5)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>log4j-api.jar (org.apache.logging.log4j:log4j-api:2.13.3)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>log4j-core.jar (org.apache.logging.log4j:log4j-core:2.13.3)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>org.apache.logging.log4j.core</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>log4j-slf4j-impl.jar (org.apache.logging.log4j:log4j-slf4j-impl:2.13.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.logging.log4j.slf4j</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>log4j-web.jar (org.apache.logging.log4j:log4j-web:2.13.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.logging.log4j.web</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>mina-core.jar (org.apache.mina:mina-core:2.0.16)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>proton-j.jar (org.apache.qpid:proton-j:0.33.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-cache.jar (org.apache.shiro:shiro-cache:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-config-core.jar (org.apache.shiro:shiro-config-core:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-config-ogdl.jar (org.apache.shiro:shiro-config-ogdl:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-core.jar (org.apache.shiro:shiro-core:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-crypto-cipher.jar (org.apache.shiro:shiro-crypto-cipher:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-crypto-core.jar (org.apache.shiro:shiro-crypto-core:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-crypto-hash.jar (org.apache.shiro:shiro-crypto-hash:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-event.jar (org.apache.shiro:shiro-event:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>shiro-lang.jar (org.apache.shiro:shiro-lang:1.4.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>sshd-common.jar (org.apache.sshd:sshd-common:2.3.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>sshd-core.jar (org.apache.sshd:sshd-core:2.3.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>sshd-pam.jar (org.apache.sshd:sshd-pam:0.11.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>bcpkix-jdk15on.jar (org.bouncycastle:bcpkix-jdk15on:1.66)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>org.bouncycastle.pkix</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>bcprov-jdk15on.jar (org.bouncycastle:bcprov-jdk15on:1.66)</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>org.bouncycastle.provider</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>checker-qual.jar (org.checkerframework:checker-qual:2.8.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.checkerframework.checker.qual</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>groovy-all.jar (org.codehaus.groovy:groovy-all:1.8.9)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>animal-sniffer-annotations.jar (org.codehaus.mojo:animal-sniffer-annotations:1.17)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>crash.cli.jar (org.crashub:crash.cli:1.7.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>crash.connectors.ssh.jar (org.crashub:crash.connectors.ssh:1.7.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>crash.shell.jar (org.crashub:crash.shell:1.7.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>dom4j.jar (org.dom4j:dom4j:2.1.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-continuation.jar (org.eclipse.jetty:jetty-continuation:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.continuation</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-http.jar (org.eclipse.jetty:jetty-http:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.http</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-io.jar (org.eclipse.jetty:jetty-io:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.io</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-security.jar (org.eclipse.jetty:jetty-security:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.security</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-server.jar (org.eclipse.jetty:jetty-server:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.server</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-servlet.jar (org.eclipse.jetty:jetty-servlet:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.servlet</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-util.jar (org.eclipse.jetty:jetty-util:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.util</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-webapp.jar (org.eclipse.jetty:jetty-webapp:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.webapp</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jetty-xml.jar (org.eclipse.jetty:jetty-xml:9.4.19.v20190610)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.eclipse.jetty.xml</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jansi.jar (org.fusesource.jansi:jansi:1.18)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.fusesource.jansi</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>easybind.jar (org.fxmisc.easybind:easybind:1.0.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>aopalliance-repackaged.jar (org.glassfish.hk2.external:aopalliance-repackaged:2.5.0-b30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>javax.inject.jar (org.glassfish.hk2.external:javax.inject:2.5.0-b30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>hk2-api.jar (org.glassfish.hk2:hk2-api:2.5.0-b30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>hk2-locator.jar (org.glassfish.hk2:hk2-locator:2.5.0-b30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>hk2-utils.jar (org.glassfish.hk2:hk2-utils:2.5.0-b30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>osgi-resource-locator.jar (org.glassfish.hk2:osgi-resource-locator:1.0.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jaxb-runtime.jar (org.glassfish.jaxb:jaxb-runtime:2.3.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>txw2.jar (org.glassfish.jaxb:txw2:2.3.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-guava.jar (org.glassfish.jersey.bundles.repackaged:jersey-guava:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-container-jetty-http.jar (org.glassfish.jersey.containers:jersey-container-jetty-http:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-container-servlet-core.jar (org.glassfish.jersey.containers:jersey-container-servlet-core:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-container-servlet.jar (org.glassfish.jersey.containers:jersey-container-servlet:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-client.jar (org.glassfish.jersey.core:jersey-client:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-common.jar (org.glassfish.jersey.core:jersey-common:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-server.jar (org.glassfish.jersey.core:jersey-server:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-entity-filtering.jar (org.glassfish.jersey.ext:jersey-entity-filtering:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-media-jaxb.jar (org.glassfish.jersey.media:jersey-media-jaxb:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jersey-media-json-jackson.jar (org.glassfish.jersey.media:jersey-media-json-jackson:2.25)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>HdrHistogram.jar (org.hdrhistogram:HdrHistogram:2.1.10)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>hibernate-commons-annotations.jar (org.hibernate.common:hibernate-commons-annotations:5.1.0.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.hibernate.commons.annotations</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>hibernate-core.jar (org.hibernate:hibernate-core:5.4.3.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.hibernate.orm.core</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>hibernate-java8.jar (org.hibernate:hibernate-java8:5.4.3.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>snappy.jar (org.iq80.snappy:snappy:0.4)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>javassist.jar (org.javassist:javassist:3.24.0-GA)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jboss-logging.jar (org.jboss.logging:jboss-logging:3.3.2.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.jboss.logging</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jboss-transaction-api_1.2_spec.jar (org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.1.1.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>java.transaction</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jandex.jar (org.jboss:jandex:2.0.5.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-reflect.jar (org.jetbrains.kotlin:kotlin-reflect:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-stdlib-common.jar (org.jetbrains.kotlin:kotlin-stdlib-common:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-stdlib-jdk7.jar (org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-stdlib-jdk8.jar (org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-stdlib-jre7.jar (org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-stdlib-jre8.jar (org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlin-stdlib.jar (org.jetbrains.kotlin:kotlin-stdlib:1.2.71)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>kotlinx-html-jvm.jar (org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.12)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>annotations.jar (org.jetbrains:annotations:13.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jgroups.jar (org.jgroups:jgroups:3.6.13.Final)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jolokia-core.jar (org.jolokia:jolokia-core:1.6.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jolokia-jvm-agent.jar (org.jolokia:jolokia-jvm:1.6.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>stax-ex.jar (org.jvnet.staxex:stax-ex:1.8)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>LatencyUtils.jar (org.latencyutils:LatencyUtils:2.0.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>liquibase-core.jar (org.liquibase:liquibase-core:3.6.3)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>objenesis.jar (org.objenesis:objenesis:2.6)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>javafx-base-linux.jar (org.openjfx:javafx-base:11.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>javafx-controls-linux.jar (org.openjfx:javafx-controls:11.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>javafx-fxml-linux.jar (org.openjfx:javafx-fxml:11.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>javafx-graphics-linux.jar (org.openjfx:javafx-graphics:11.0.2)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>asm-analysis.jar (org.ow2.asm:asm-analysis:7.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>asm-commons.jar (org.ow2.asm:asm-commons:7.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>asm-tree.jar (org.ow2.asm:asm-tree:7.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>asm-util.jar (org.ow2.asm:asm-util:7.0)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>asm.jar (org.ow2.asm:asm:7.1)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✓</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>reactfx.jar (org.reactfx:reactfx:2.0-M5)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>jcl-over-slf4j.jar (org.slf4j:jcl-over-slf4j:1.7.30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.apache.commons.logging</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>jul-to-slf4j.jar (org.slf4j:jul-to-slf4j:1.7.30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>slf4j-api.jar (org.slf4j:slf4j-api:1.7.30)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>org.slf4j</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:fdd;'>
+      <td>snakeyaml.jar (org.yaml:snakeyaml:1.23)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>n/a</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✕</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-core.jar (project :core)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.core</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-finance-contracts.jar (project :finance:contracts)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.contracts</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-node-djvm.jar (project :node:djvm)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.node.djvm</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-serialization.jar (project :serialization)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.serialization</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-serialization-djvm.jar (project :serialization-djvm)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.serialization.djvm</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+    <tr style='background-color:#dfd;'>
+      <td>corda-deserializers-djvm.jar (project :serialization-djvm:deserializers)</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>net.corda.serialization.djvm.deserializers</td>
+      <td style='text-align: center;'>✕</td>
+      <td style='text-align: center;'>✓</td>
+    </tr>
+  </tbody>
+</table>
